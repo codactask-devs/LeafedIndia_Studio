@@ -9,6 +9,7 @@ import {
 import useStore from "../store/useStore";
 import TemplatesSection from "./TemplatesSection";
 import ImagesSection from "./ImagesSection";
+import ClipartSection from "./ClipartSection";
 import TextSection from "./TextSection";
 import "./Sidebar.css";
 
@@ -90,6 +91,38 @@ const Sidebar = () => {
                     />
                </div>
                <div className="sidebar-property-column">
+                    <label className="sidebar-label-sm">Font Style</label>
+                    <div className="custom-dropdown-container">
+                        <select 
+                            className="sidebar-category-select" 
+                            style={{ padding: '10px 14px' }}
+                            value={selectedObject.fontFamily || "'Outfit', sans-serif"}
+                            onChange={(e) => updateObject(selectedId, { fontFamily: e.target.value })}
+                        >
+                            <optgroup label="Sans Serif">
+                                <option value="'Inter', sans-serif">Inter</option>
+                                <option value="'Outfit', sans-serif">Outfit</option>
+                                <option value="'Montserrat', sans-serif">Montserrat</option>
+                                <option value="'Poppins', sans-serif">Poppins</option>
+                                <option value="'Roboto', sans-serif">Roboto</option>
+                                <option value="'Space Grotesk', sans-serif">Space Grotesk</option>
+                            </optgroup>
+                            <optgroup label="Serif">
+                                <option value="'Playfair Display', serif">Playfair Display</option>
+                                <option value="'Lora', serif">Lora</option>
+                            </optgroup>
+                            <optgroup label="Display & Script">
+                                <option value="'Lobster', cursive">Lobster</option>
+                                <option value="'Pacifico', cursive">Pacifico</option>
+                                <option value="'Caveat', cursive">Caveat</option>
+                                <option value="'Fredoka', sans-serif">Fredoka</option>
+                                <option value="'Shadows Into Light', cursive">Shadows Light</option>
+                            </optgroup>
+                        </select>
+                    </div>
+               </div>
+
+               <div className="sidebar-property-column">
                     <label className="sidebar-label-sm">Size (px)</label>
                     <div className="sidebar-input-row">
                         <input
@@ -149,14 +182,10 @@ const Sidebar = () => {
         return <TemplatesSection />;
       case "images":
         return <ImagesSection />;
+      case "clipart":
+        return <ClipartSection />;
       case "text":
         return <TextSection />;
-      case "graphics":
-        return (
-          <div className="sidebar-content">
-            <p>Graphics coming soon...</p>
-          </div>
-        );
       default:
         return <TemplatesSection />;
     }

@@ -3,8 +3,7 @@ import {
   LayoutGrid, 
   Type, 
   Image as ImageIcon, 
-  Upload, 
-  Square,
+  Smile,
   Sparkles
 } from "lucide-react";
 import useStore from "../store/useStore";
@@ -16,6 +15,7 @@ const LeftSidebar = () => {
   const menuItems = [
     { id: "templates", icon: LayoutGrid, label: "Templates" },
     { id: "images", icon: ImageIcon, label: "Images" },
+    { id: "clipart", icon: Smile, label: "Clipart" },
     { id: "text", icon: Type, label: "Text" },
   ];
 

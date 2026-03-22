@@ -1,0 +1,43 @@
+.templates-tool-section h3 {
+  font-size: 11px;
+  text-transform: uppercase;
+  color: var(--text-muted);
+  letter-spacing: 0.1em;
+  margin: 0 0 16px 0;
+  font-weight: 700;
+}
+
+.templates-grid {
+  display: grid;
+  grid-template-columns: repeat(1, 1fr);
+  gap: 12px;
+}
+
+.templates-item {
+  padding: 16px;
+  background: #f8fafc;
+  border: 1px solid var(--border);
+  display: flex;
+  align-items: center;
+  gap: 16px;
+  cursor: pointer;
+  border-radius: var(--radius-sm);
+  transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+.templates-item span {
+  font-size: 14px;
+  font-weight: 800;
+  color: var(--text);
+}
+
+.templates-item:hover {
+  border-color: var(--primary);
+  background: white;
+  box-shadow: var(--shadow-sm);
+  transform: translateY(-2px);
+}
+
+.templates-item:hover svg {
+  color: var(--primary);
+}

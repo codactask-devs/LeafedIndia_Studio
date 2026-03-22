@@ -1,0 +1,112 @@
+.app-main-container {
+  display: flex;
+  flex-direction: column;
+  height: 100vh;
+  background-color: #f1f5f9;
+}
+
+.app-content-layout {
+  display: flex;
+  flex: 1;
+  overflow: hidden;
+  padding: 16px;
+  gap: 16px;
+}
+
+.canvas-workspace {
+  flex: 1;
+  background: #ffffff;
+  border-radius: var(--radius-lg);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  box-shadow: var(--shadow-md);
+  overflow: hidden;
+  position: relative;
+}
+
+.app-modal-overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  backdrop-filter: blur(12px);
+  background-color: rgba(15, 23, 42, 0.4);
+  z-index: 9999;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.app-modal-content {
+  background: var(--surface);
+  border: none;
+  border-radius: 32px;
+  padding: 48px;
+  width: 90%;
+  max-width: 520px;
+  box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.25);
+  animation: modalSlideUp 0.4s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+@keyframes modalSlideUp {
+  from { opacity: 0; transform: translateY(20px) scale(0.98); }
+  to { opacity: 1; transform: translateY(0) scale(1); }
+}
+
+.app-modal-content h2 {
+  font-size: 28px;
+  font-weight: 800;
+  margin-bottom: 8px;
+  color: var(--text);
+  margin-top: 0;
+}
+
+.app-modal-subtitle {
+  color: var(--text-muted);
+  margin-bottom: 32px;
+}
+
+.app-form-group {
+  margin-bottom: 24px;
+}
+
+.app-form-group label {
+  display: block;
+  font-weight: 600;
+  margin-bottom: 8px;
+  color: var(--text);
+  font-size: 14px;
+}
+
+.app-input {
+  border: 1px solid var(--border);
+  padding: 14px 18px;
+  font-family: inherit;
+  font-size: 16px;
+  transition: all 0.2s;
+  border-radius: var(--radius-sm);
+  width: 100%;
+  background: #f8fafc;
+}
+
+.app-input:focus {
+  border-color: var(--primary);
+  background: white;
+  outline: none;
+  box-shadow: 0 0 0 4px rgba(139, 92, 246, 0.1);
+}
+
+.app-button-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 16px;
+    margin-top: 32px;
+}
+
+.app-spacer-top {
+    margin-top: auto;
+    padding-top: 24px;
+    border-top: 1px dashed var(--border);
+}

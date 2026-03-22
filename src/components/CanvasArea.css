@@ -1,0 +1,24 @@
+.canvas-workspace {
+  flex: 1;
+  background-color: #f1f5f9;
+  background-image: 
+    radial-gradient(#e2e8f0 1.5px, transparent 1.5px);
+  background-size: 24px 24px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  overflow: auto;
+  position: relative;
+}
+
+.canvas-wrapper {
+  background: white;
+  padding: 0px;
+  border-radius: 4px;
+  box-shadow: 0 4px 20px rgba(0,0,0,0.08);
+  position: relative;
+}
+
+.canvas-container {
+  overflow: visible;
+}

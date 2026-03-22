@@ -18,52 +18,85 @@ const URLImage = ({ src, ...props }) => {
   return <KonvaImage image={image} {...props} />;
 };
 
-const SelectionControls = ({ selectedId, object, onDelete, onDuplicate }) => {
+const SelectionControls = ({ object, onDelete, onDuplicate }) => {
+    const [hovered, setHovered] = useState(null); // 'duplicate' | 'delete' | null
+    const width = (object.width || 150) * (object.scaleX || 1);
+    const offsetX = width / 2;
+    
     return (
       <Group x={object.x} y={object.y} rotation={object.rotation}>
-        <Group y={-60}>
-          <Group onClick={onDelete} onTap={onDelete} x={-25} y={0}>
-            <Rect
-              width={24}
-              height={24}
-              fill="white"
-              stroke="#ef4444"
-              strokeWidth={1}
-              cornerRadius={4}
-              shadowColor="black"
-              shadowBlur={4}
-              shadowOpacity={0.1}
+        <Group x={offsetX - 45} y={-55}>
+          {/* Main Container Bar */}
+          <Rect
+            width={90}
+            height={40}
+            fill="white"
+            cornerRadius={12}
+            shadowColor="black"
+            shadowBlur={15}
+            shadowOpacity={0.12}
+            stroke="#e2e8f0"
+            strokeWidth={1}
+          />
+          
+          {/* Duplicate Button */}
+          <Group 
+            onClick={onDuplicate} 
+            onTap={onDuplicate} 
+            x={10} y={6} 
+            cursor="pointer"
+            onMouseEnter={() => setHovered('duplicate')}
+            onMouseLeave={() => setHovered(null)}
+            scaleX={hovered === 'duplicate' ? 1.1 : 1}
+            scaleY={hovered === 'duplicate' ? 1.1 : 1}
+            offsetX={hovered === 'duplicate' ? 1.5 : 0}
+            offsetY={hovered === 'duplicate' ? 1.5 : 0}
+          >
+            {/* Hover Background */}
+            <Rect 
+              width={30} height={30} 
+              fill={hovered === 'duplicate' ? "#eff6ff" : "transparent"} 
+              cornerRadius={8} 
             />
-            <Text
-              text="✕"
-              fontSize={14}
-              x={6}
-              y={6}
-              fill="#ef4444"
-              fontStyle="bold"
-              listening={false}
+            <Path
+              data="M9 15H5a2 2 0 01-2-2V5a2 2 0 012-2h8a2 2 0 012 2v4M15 19H9a2 2 0 01-2-2v-8a2 2 0 012-2h8a2 2 0 012 2v8a2 2 0 01-2 2z"
+              stroke={hovered === 'duplicate' ? "#2563eb" : "#475569"}
+              strokeWidth={1.8}
+              x={6} y={6}
+              scaleX={0.7}
+              scaleY={0.7}
             />
           </Group>
-          <Group onClick={onDuplicate} onTap={onDuplicate} x={5} y={0}>
-            <Rect
-              width={24}
-              height={24}
-              fill="white"
-              stroke="#3b82f6"
-              strokeWidth={1}
-              cornerRadius={4}
-              shadowColor="black"
-              shadowBlur={4}
-              shadowOpacity={0.1}
+
+          {/* Divider */}
+          <Rect x={45} y={10} width={1} height={20} fill="#f1f5f9" />
+
+          {/* Delete Button */}
+          <Group 
+            onClick={onDelete} 
+            onTap={onDelete} 
+            x={50} y={6} 
+            cursor="pointer"
+            onMouseEnter={() => setHovered('delete')}
+            onMouseLeave={() => setHovered(null)}
+            scaleX={hovered === 'delete' ? 1.1 : 1}
+            scaleY={hovered === 'delete' ? 1.1 : 1}
+            offsetX={hovered === 'delete' ? 1.5 : 0}
+            offsetY={hovered === 'delete' ? 1.5 : 0}
+          >
+            {/* Hover Background */}
+            <Rect 
+              width={30} height={30} 
+              fill={hovered === 'delete' ? "#fef2f2" : "transparent"} 
+              cornerRadius={8} 
             />
-            <Text
-              text="+"
-              fontSize={18}
-              x={6}
-              y={4}
-              fill="#3b82f6"
-              fontStyle="bold"
-              listening={false}
+            <Path
+              data="M3 6h18M19 6v14a2 2 0 01-2 2H7a2 2 0 01-2-2V6m3 0V4a2 2 0 012-2h4a2 2 0 012 2v2"
+              stroke={hovered === 'delete' ? "#dc2626" : "#475569"}
+              strokeWidth={1.8}
+              x={6} y={6}
+              scaleX={0.7}
+              scaleY={0.7}
             />
           </Group>
         </Group>

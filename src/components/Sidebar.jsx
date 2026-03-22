@@ -5,6 +5,9 @@ import {
   ArrowDown,
   Trash2,
   ChevronLeft,
+  Copy,
+  Trash,
+  Palette
 } from "lucide-react";
 import useStore from "../store/useStore";
 import TemplatesSection from "./TemplatesSection";
@@ -41,44 +44,47 @@ const Sidebar = () => {
             <ChevronLeft size={18} />
           </button>
           <h2 className="sidebar-title-inline">Edit {selectedObject.type === 'svg-path' ? 'Shape' : selectedObject.type}</h2>
+          
+          <div className="header-actions-right">
+            <button
+                className="header-action-btn"
+                onClick={() => duplicateObject(selectedId)}
+                title="Duplicate"
+              >
+                <Copy size={16} />
+              </button>
+              <button
+                className="header-action-btn delete-btn"
+                onClick={() => deleteObject(selectedId)}
+                title="Delete"
+              >
+                <Trash size={16} />
+              </button>
+          </div>
         </div>
+
         <div className="sidebar-content">
           <div className="sidebar-tool-section">
-            <h3 className="sidebar-property-label">Order & Actions</h3>
-            <div className="app-button-grid">
+            <h3 className="sidebar-property-label">Order & Layout</h3>
+            <div className="app-button-grid" style={{ gridTemplateColumns: '1fr 1fr' }}>
               <button
                 className="btn btn-secondary btn-sm"
                 onClick={() => bringToFront(selectedId)}
                 title="Bring to Front"
               >
-                <ArrowUp size={16} /> <span>Front</span>
+                <ArrowUp size={16} /> <span>Move Front</span>
               </button>
               <button
                 className="btn btn-secondary btn-sm"
                 onClick={() => sendToBack(selectedId)}
                 title="Send to Back"
               >
-                <ArrowDown size={16} /> <span>Back</span>
-              </button>
-              <button
-                className="btn btn-secondary btn-sm"
-                onClick={() => duplicateObject(selectedId)}
-                title="Duplicate"
-              >
-                <Square size={14} /> <span>Clone</span>
-              </button>
-              <button
-                className="btn btn-danger btn-sm"
-                onClick={() => deleteObject(selectedId)}
-                title="Delete"
-              >
-                <Trash2 size={16} /> <span>Delete</span>
+                <ArrowDown size={16} /> <span>Move Back</span>
               </button>
             </div>
           </div>
 
-          {/* Type-specific controls could go here, but TextSection already has them if activeTab is text. 
-              However, we want them to show whenever text is selected regardless of tab. */}
+          {/* Text-Specific Properties */}
           {selectedObject.type === "text" && (
             <div className="sidebar-tool-section premium-editor-box">
                <h3 className="section-label-premium">Text Details</h3>
@@ -88,6 +94,7 @@ const Sidebar = () => {
                         className="sidebar-textarea-premium"
                         value={selectedObject.text}
                         onChange={(e) => updateObject(selectedId, { text: e.target.value })}
+                        placeholder="Type something amazing..."
                     />
                </div>
                <div className="sidebar-property-column">
@@ -141,35 +148,32 @@ const Sidebar = () => {
                         />
                     </div>
                </div>
-            </div>
-          )}
 
-          {(selectedObject.type === "svg-path" || selectedObject.type === "text") && (
-            <div className="sidebar-tool-section premium-editor-box">
-              <h3 className="section-label-premium">Appearance</h3>
-              <div className="sidebar-property-column">
-                <label className="sidebar-label-sm">{selectedObject.type === "text" ? "Text Color Signature" : "Fill Color"}</label>
-                <div className="sidebar-color-row-premium">
-                    <div className="sidebar-color-picker-wrapper-lux">
+               <div className="sidebar-property-column">
+                    <label className="sidebar-label-sm">Color Signature</label>
+                    <div className="sidebar-color-row-premium">
+                        <div className="sidebar-color-picker-wrapper-lux">
+                            <input
+                                type="color"
+                                value={selectedObject.fill || "#000000"}
+                                onChange={(e) => updateObject(selectedId, { fill: e.target.value })}
+                            />
+                        </div>
                         <input
-                            type="color"
+                            type="text"
+                            className="sidebar-text-input-premium"
                             value={selectedObject.fill || "#000000"}
                             onChange={(e) => updateObject(selectedId, { fill: e.target.value })}
+                            maxLength={7}
                         />
                     </div>
-                    <input
-                        type="text"
-                        className="sidebar-text-input-premium"
-                        value={selectedObject.fill || "#000000"}
-                        onChange={(e) => updateObject(selectedId, { fill: e.target.value })}
-                        maxLength={7}
-                    />
-                </div>
-              </div>
+               </div>
             </div>
           )}
 
-          <div className="sidebar-help-text">Click on the canvas background to deselect.</div>
+          <div className="sidebar-help-text" style={{ marginTop: '30px' }}>
+            Click on the canvas background to deselect.
+          </div>
         </div>
       </div>
     );
@@ -195,7 +199,7 @@ const Sidebar = () => {
     <div className="sidebar-container">
       <div className="sidebar-header">
         <h2 className="sidebar-title">
-          {activeTab.charAt(0) + activeTab.slice(1)}
+          {activeTab.charAt(0).toUpperCase() + activeTab.slice(1)}
         </h2>
       </div>
       <div className="sidebar-content">
@@ -205,6 +209,4 @@ const Sidebar = () => {
   );
 };
 
-
 export default Sidebar;
-

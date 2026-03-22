@@ -35,19 +35,58 @@ const TextSection = () => {
             <div className="sidebar-tool-section">
                 <h3 className="section-label-premium">Text Presets</h3>
                 <div className="sidebar-text-presets">
-                    <button className="text-preset-btn-premium h1-preset" onClick={addHeading}>
+                    <button 
+                        className="text-preset-btn-premium h1-preset" 
+                        onClick={addHeading}
+                        draggable
+                        onDragStart={(e) => {
+                            e.dataTransfer.setData("type", "text");
+                            e.dataTransfer.setData("payload", JSON.stringify({ 
+                                text: "Add Heading", 
+                                fontSize: 48, 
+                                fontWeight: "800", 
+                                fontFamily: "'Montserrat', sans-serif" 
+                            }));
+                        }}
+                    >
                         <div className="preset-flex">
                             <span className="preset-label">Add a heading</span>
                             <span className="preset-preview h1-preview">Heading</span>
                         </div>
                     </button>
-                    <button className="text-preset-btn-premium h2-preset" onClick={addSubHeading}>
+                    <button 
+                        className="text-preset-btn-premium h2-preset" 
+                        onClick={addSubHeading}
+                        draggable
+                        onDragStart={(e) => {
+                            e.dataTransfer.setData("type", "text");
+                            e.dataTransfer.setData("payload", JSON.stringify({ 
+                                text: "Add Sub Heading", 
+                                fontSize: 32, 
+                                fontWeight: "600", 
+                                fontFamily: "'Outfit', sans-serif" 
+                            }));
+                        }}
+                    >
                         <div className="preset-flex">
                             <span className="preset-label">Add a subheading</span>
                             <span className="preset-preview h2-preview">Subheading</span>
                         </div>
                     </button>
-                    <button className="text-preset-btn-premium body-preset" onClick={addBodyText}>
+                    <button 
+                        className="text-preset-btn-premium body-preset" 
+                        onClick={addBodyText}
+                        draggable
+                        onDragStart={(e) => {
+                            e.dataTransfer.setData("type", "text");
+                            e.dataTransfer.setData("payload", JSON.stringify({ 
+                                text: "Add Body Text", 
+                                fontSize: 18, 
+                                fontWeight: "400", 
+                                fontFamily: "'Outfit', sans-serif" 
+                            }));
+                        }}
+                    >
                         <div className="preset-flex">
                             <span className="preset-label">Add body text</span>
                             <span className="preset-preview body-preview">Body text</span>

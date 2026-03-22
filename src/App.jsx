@@ -41,8 +41,19 @@ function App() {
         src: payload.src || "https://via.placeholder.com/150",
         x,
         y,
-        width: 200,
-        height: 200,
+        width: 250,
+        height: 250,
+      });
+    } else if (type === "text") {
+      addObject({
+        type: "text",
+        text: payload.text || "Hello",
+        fontSize: payload.fontSize || 32,
+        fontWeight: payload.fontWeight || "400",
+        fontFamily: payload.fontFamily || "'Outfit', sans-serif",
+        fill: "#0f172a",
+        x,
+        y,
       });
     } else if (type === "svg-template") {
       loadSvgTemplate(x, y, payload.url);

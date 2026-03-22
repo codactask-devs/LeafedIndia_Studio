@@ -198,6 +198,12 @@ const ClipartSection = () => {
                                 src={`https://api.iconify.design/${item.icon}.svg`} 
                                 alt={item.name} 
                                 className="clipart-preview" 
+                                draggable
+                                onDragStart={(e) => {
+                                    const src = `https://api.iconify.design/${item.icon}.svg`;
+                                    e.dataTransfer.setData("type", "image");
+                                    e.dataTransfer.setData("payload", JSON.stringify({ src }));
+                                }}
                                 onError={handleImageError}
                             />
                             <span className="clipart-name">{item.name}</span>

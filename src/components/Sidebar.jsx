@@ -91,6 +91,7 @@ const Sidebar = () => {
               
               <div className="sidebar-property-column">
                 <label className="sidebar-label-sm">Fill Color</label>
+                <br/>
                 <div className="sidebar-color-row-premium">
                   <div className="sidebar-color-picker-wrapper-lux">
                     <input

@@ -1,6 +1,7 @@
 import React, { useRef, useState, useCallback } from "react";
 import jsPDF from "jspdf";
 import emailjs from "@emailjs/browser";
+import LeftSidebar from "./components/LeftSidebar";
 import Sidebar from "./components/Sidebar";
 import CanvasArea from "./components/CanvasArea";
 import Toolbar from "./components/Toolbar";
@@ -143,6 +144,7 @@ function App() {
 
       <Toolbar onExport={handleExportPdfClick} />
       <div className="app-content-layout">
+        <LeftSidebar />
         <Sidebar />
         <main
           className="canvas-workspace"

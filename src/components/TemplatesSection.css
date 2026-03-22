@@ -9,35 +9,55 @@
 
 .templates-grid {
   display: grid;
-  grid-template-columns: repeat(1, 1fr);
-  gap: 12px;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 16px;
 }
 
 .templates-item {
-  padding: 16px;
-  background: #f8fafc;
-  border: 1px solid var(--border);
+  width: 100%;
+  aspect-ratio: 1;
+  background: #ffffff;
+  border: 1px solid #e2e8f0;
+  border-radius: 12px;
   display: flex;
+  flex-direction: column;
   align-items: center;
-  gap: 16px;
+  justify-content: center;
   cursor: pointer;
-  border-radius: var(--radius-sm);
   transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1);
-}
-
-.templates-item span {
-  font-size: 14px;
-  font-weight: 800;
-  color: var(--text);
+  padding: 12px;
+  text-align: center;
 }
 
 .templates-item:hover {
-  border-color: var(--primary);
-  background: white;
-  box-shadow: var(--shadow-sm);
+  border-color: #3b82f6;
+  background-color: #f0f9ff;
   transform: translateY(-2px);
+  box-shadow: 0 4px 12px rgba(59, 130, 246, 0.1);
 }
 
-.templates-item:hover svg {
-  color: var(--primary);
+.template-preview-box {
+  width: 48px;
+  height: 48px;
+  background: #f8fafc;
+  border-radius: 8px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin-bottom: 8px;
+  color: #64748b;
+  transition: all 0.2s;
+}
+
+.templates-item:hover .template-preview-box {
+  background: #ffffff;
+  color: #3b82f6;
+}
+
+.template-name {
+  font-size: 11px;
+  font-weight: 600;
+  color: #475569;
+  text-transform: uppercase;
+  letter-spacing: 0.025em;
 }

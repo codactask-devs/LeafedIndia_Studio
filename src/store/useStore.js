@@ -8,8 +8,11 @@ const useStore = create((set, get) => ({
   history: [[]],
   historyStep: 0,
   currentTemplate: null,
+  activeTab: "templates", // "templates", "images", "text"
 
   setTemplate: (template) => set({ currentTemplate: template }),
+  setActiveTab: (tab) => set({ activeTab: tab }),
+
 
   loadSvgTemplate: async (x, y, url) => {
     try {

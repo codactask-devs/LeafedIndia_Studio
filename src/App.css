@@ -2,27 +2,27 @@
   display: flex;
   flex-direction: column;
   height: 100vh;
-  background-color: #f1f5f9;
+  font-family: 'Outfit', 'Montserrat', sans-serif;
+  background-color: #f8fafc;
 }
+
 
 .app-content-layout {
   display: flex;
   flex: 1;
   overflow: hidden;
-  padding: 16px;
-  gap: 16px;
+  height: calc(100vh - 64px); /* Adjust for Toolbar height if needed */
 }
 
 .canvas-workspace {
   flex: 1;
-  background: #ffffff;
-  border-radius: var(--radius-lg);
+  background: #f1f5f9;
   display: flex;
   align-items: center;
   justify-content: center;
-  box-shadow: var(--shadow-md);
-  overflow: hidden;
   position: relative;
+  overflow: hidden;
+  padding: 40px;
 }
 
 .app-modal-overlay {

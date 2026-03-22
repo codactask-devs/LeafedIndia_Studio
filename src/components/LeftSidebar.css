@@ -1,0 +1,61 @@
+.left-sidebar {
+  width: 72px;
+  background-color: #0f172a; /* Slate 900 */
+  display: flex;
+  flex-direction: column;
+  padding: 12px 0;
+  border-right: 1px solid rgba(255, 255, 255, 0.1);
+  z-index: 100;
+  flex-shrink: 0;
+}
+
+.left-sidebar-item {
+  width: 100%;
+  padding: 12px 0;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 4px;
+  background: transparent;
+  border: none;
+  color: #94a3b8; /* Slate 400 */
+  cursor: pointer;
+  transition: all 0.2s ease;
+  position: relative;
+}
+
+.left-sidebar-item svg {
+  transition: transform 0.2s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+.left-sidebar-item span {
+  font-size: 10px;
+  font-weight: 500;
+  letter-spacing: 0.025em;
+}
+
+.left-sidebar-item:hover {
+  color: #f8fafc;
+}
+
+.left-sidebar-item:hover svg {
+  transform: scale(1.1);
+}
+
+.left-sidebar-item.active {
+  color: #ffffff;
+  background-color: rgba(255, 255, 255, 0.1);
+}
+
+.left-sidebar-item.active::after {
+  content: '';
+  position: absolute;
+  left: 0;
+  top: 15%;
+  bottom: 15%;
+  width: 3px;
+  background-color: #3b82f6; /* Blue 500 */
+  border-radius: 0 4px 4px 0;
+}
+
+/* Tooltip or additional styling? For now, this is clean. */

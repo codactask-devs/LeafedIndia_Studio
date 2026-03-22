@@ -1,0 +1,137 @@
+import React, { useState, useEffect } from "react";
+import useStore from "../store/useStore";
+import "./Sidebar.css";
+
+const TextSection = () => {
+    const { 
+        addObject, 
+        selectedId, 
+        objects, 
+        updateObject 
+    } = useStore();
+
+    const selectedObject = objects.find((o) => o.id === selectedId);
+    const isText = selectedObject?.type === "text";
+
+    const addText = (text, size, weight, font) => {
+        addObject({
+            type: "text",
+            text,
+            fontSize: size,
+            fill: "#0f172a",
+            fontWeight: weight,
+            fontFamily: font,
+            x: 150,
+            y: 150,
+        });
+    };
+
+    const addHeading = () => addText("Add Heading", 48, "800", "'Montserrat', sans-serif");
+    const addSubHeading = () => addText("Add Sub Heading", 32, "600", "'Outfit', sans-serif");
+    const addBodyText = () => addText("Add Body Text", 18, "400", "'Outfit', sans-serif");
+
+    return (
+        <div className="sidebar-section-container">
+            <div className="sidebar-tool-section">
+                <h3 className="section-label-premium">Text Presets</h3>
+                <div className="sidebar-text-presets">
+                    <button className="text-preset-btn-premium h1-preset" onClick={addHeading}>
+                        <div className="preset-flex">
+                            <span className="preset-label">Add a heading</span>
+                            <span className="preset-preview h1-preview">Heading</span>
+                        </div>
+                    </button>
+                    <button className="text-preset-btn-premium h2-preset" onClick={addSubHeading}>
+                        <div className="preset-flex">
+                            <span className="preset-label">Add a subheading</span>
+                            <span className="preset-preview h2-preview">Subheading</span>
+                        </div>
+                    </button>
+                    <button className="text-preset-btn-premium body-preset" onClick={addBodyText}>
+                        <div className="preset-flex">
+                            <span className="preset-label">Add body text</span>
+                            <span className="preset-preview body-preview">Body text</span>
+                        </div>
+                    </button>
+                </div>
+            </div>
+
+            <div className="sidebar-tool-section">
+                <h3 className="section-label-premium">Curated Styles</h3>
+                <div className="sidebar-text-presets mini-grid">
+                    <button 
+                        className="text-preset-mini serif-gold" 
+                        onClick={() => addText("Classic Script", 54, "700", "'Playfair Display', serif")}
+                    >
+                        <span style={{ fontFamily: "'Playfair Display', serif" }}>Serif</span>
+                    </button>
+                    <button 
+                        className="text-preset-mini hand-chic" 
+                        onClick={() => addText("Handwritten", 48, "700", "'Caveat', cursive")}
+                    >
+                        <span style={{ fontFamily: "'Caveat', cursive" }}>Chic</span>
+                    </button>
+                </div>
+            </div>
+
+            {isText && (
+                <div className="sidebar-tool-section premium-editor-box">
+                    <h3 className="section-label-premium">Content Styling</h3>
+                    
+                    <div className="sidebar-property-column">
+                        <label className="sidebar-label-sm">Text Material</label>
+                        <textarea
+                            className="sidebar-textarea-premium"
+                            value={selectedObject.text}
+                            onChange={(e) => updateObject(selectedId, { text: e.target.value })}
+                            placeholder="Type something amazing..."
+                        />
+                    </div>
+
+                    <div className="sidebar-property-column">
+                        <label className="sidebar-label-sm">Character Scaling</label>
+                        <div className="sidebar-input-row">
+                            <input
+                                type="range"
+                                min="8"
+                                max="200"
+                                value={selectedObject.fontSize}
+                                onChange={(e) => updateObject(selectedId, { fontSize: parseInt(e.target.value) })}
+                                className="sidebar-range-premium"
+                            />
+                            <input
+                                type="number"
+                                className="sidebar-number-input"
+                                value={selectedObject.fontSize}
+                                onChange={(e) => updateObject(selectedId, { fontSize: parseInt(e.target.value) || 0 })}
+                            />
+                        </div>
+                    </div>
+
+                    <div className="sidebar-property-column">
+                        <label className="sidebar-label-sm">Color Signature</label>
+                        <div className="sidebar-color-row-premium">
+                            <div className="sidebar-color-picker-wrapper-lux">
+                                <input
+                                    type="color"
+                                    value={selectedObject.fill || "#000000"}
+                                    onChange={(e) => updateObject(selectedId, { fill: e.target.value })}
+                                />
+                            </div>
+                            <input
+                                type="text"
+                                className="sidebar-text-input-premium"
+                                value={selectedObject.fill || "#000000"}
+                                onChange={(e) => updateObject(selectedId, { fill: e.target.value })}
+                                maxLength={7}
+                            />
+                        </div>
+                    </div>
+                </div>
+            )}
+        </div>
+    );
+};
+
+
+export default TextSection;

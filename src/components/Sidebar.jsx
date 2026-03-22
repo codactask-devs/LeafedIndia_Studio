@@ -1,15 +1,15 @@
-import React, { useRef } from "react";
+import React from "react";
 import {
   Square,
-  Upload,
   ArrowUp,
   ArrowDown,
   Trash2,
   ChevronLeft,
-  Type,
 } from "lucide-react";
 import useStore from "../store/useStore";
 import TemplatesSection from "./TemplatesSection";
+import ImagesSection from "./ImagesSection";
+import TextSection from "./TextSection";
 import "./Sidebar.css";
 
 const Sidebar = () => {
@@ -22,53 +22,24 @@ const Sidebar = () => {
     deleteObject,
     duplicateObject,
     selectObject,
-    addObject,
+    activeTab,
   } = useStore();
-  const fileInputRef = useRef(null);
 
   const selectedObject = objects.find((o) => o.id === selectedId);
 
-  const handleDragStart = (e, type, payload) => {
-    e.dataTransfer.setData("type", type);
-    if (payload) {
-      e.dataTransfer.setData("payload", JSON.stringify(payload));
-    }
-  };
-
-  const handleFileUpload = (e) => {
-    const file = e.target.files[0];
-    if (file) {
-      const reader = new FileReader();
-      reader.onload = (event) => {
-        const img = new Image();
-        img.onload = () => {
-          addObject({
-            type: "image",
-            src: event.target.result,
-            width: 200,
-            height: 200 * (img.height / img.width), // Maintain aspect ratio
-            x: 100,
-            y: 100,
-          });
-        };
-        img.src = event.target.result;
-      };
-      reader.readAsDataURL(file);
-    }
-  };
-
+  // If an object is selected, show its properties
   if (selectedObject) {
     return (
       <div className="sidebar-container sidebar-properties">
-        <div className="sidebar-header">
+        <div className="sidebar-header-row">
           <button
-            className="toolbar-icon-btn"
+            className="sidebar-back-btn"
             onClick={() => selectObject(null)}
             title="Back to Assets"
           >
-            <ChevronLeft size={20} />
+            <ChevronLeft size={18} />
           </button>
-          <h2 className="sidebar-title">Edit {selectedObject.type === 'svg-path' ? 'Section' : selectedObject.type}</h2>
+          <h2 className="sidebar-title-inline">Edit {selectedObject.type === 'svg-path' ? 'Shape' : selectedObject.type}</h2>
         </div>
         <div className="sidebar-content">
           <div className="sidebar-tool-section">
@@ -105,24 +76,61 @@ const Sidebar = () => {
             </div>
           </div>
 
-          {(selectedObject.type === "svg-path" || selectedObject.type === "text") && (
-            <div className="sidebar-tool-section">
-              <h3 className="sidebar-property-label">Appearance</h3>
+          {/* Type-specific controls could go here, but TextSection already has them if activeTab is text. 
+              However, we want them to show whenever text is selected regardless of tab. */}
+          {selectedObject.type === "text" && (
+            <div className="sidebar-tool-section premium-editor-box">
+               <h3 className="section-label-premium">Text Details</h3>
+               <div className="sidebar-property-column">
+                    <label className="sidebar-label-sm">Content</label>
+                    <textarea
+                        className="sidebar-textarea-premium"
+                        value={selectedObject.text}
+                        onChange={(e) => updateObject(selectedId, { text: e.target.value })}
+                    />
+               </div>
+               <div className="sidebar-property-column">
+                    <label className="sidebar-label-sm">Size (px)</label>
+                    <div className="sidebar-input-row">
+                        <input
+                            type="range"
+                            min="8"
+                            max="200"
+                            value={selectedObject.fontSize}
+                            onChange={(e) => updateObject(selectedId, { fontSize: parseInt(e.target.value) })}
+                            className="sidebar-range-premium"
+                        />
+                        <input
+                            type="number"
+                            className="sidebar-number-input"
+                            value={selectedObject.fontSize}
+                            onChange={(e) => updateObject(selectedId, { fontSize: parseInt(e.target.value) || 0 })}
+                        />
+                    </div>
+               </div>
+            </div>
+          )}
 
-              <div className="sidebar-property-row">
-                <span className="sidebar-label-sm">{selectedObject.type === "text" ? "Text Color" : "Fill Color"}</span>
-                <div className="sidebar-color-picker-wrapper">
-                  <input
-                    type="color"
-                    value={selectedObject.fill || "#000000"}
-                    onChange={(e) =>
-                      updateObject(selectedId, { fill: e.target.value })
-                    }
-                    className="sidebar-color-input"
-                  />
-                  <span className="sidebar-color-value">
-                    {selectedObject.fill || "#000000"}
-                  </span>
+          {(selectedObject.type === "svg-path" || selectedObject.type === "text") && (
+            <div className="sidebar-tool-section premium-editor-box">
+              <h3 className="section-label-premium">Appearance</h3>
+              <div className="sidebar-property-column">
+                <label className="sidebar-label-sm">{selectedObject.type === "text" ? "Text Color Signature" : "Fill Color"}</label>
+                <div className="sidebar-color-row-premium">
+                    <div className="sidebar-color-picker-wrapper-lux">
+                        <input
+                            type="color"
+                            value={selectedObject.fill || "#000000"}
+                            onChange={(e) => updateObject(selectedId, { fill: e.target.value })}
+                        />
+                    </div>
+                    <input
+                        type="text"
+                        className="sidebar-text-input-premium"
+                        value={selectedObject.fill || "#000000"}
+                        onChange={(e) => updateObject(selectedId, { fill: e.target.value })}
+                        maxLength={7}
+                    />
                 </div>
               </div>
             </div>
@@ -134,71 +142,40 @@ const Sidebar = () => {
     );
   }
 
+  // Otherwise show the active tab content
+  const renderTabContent = () => {
+    switch (activeTab) {
+      case "templates":
+        return <TemplatesSection />;
+      case "images":
+        return <ImagesSection />;
+      case "text":
+        return <TextSection />;
+      case "graphics":
+        return (
+          <div className="sidebar-content">
+            <p>Graphics coming soon...</p>
+          </div>
+        );
+      default:
+        return <TemplatesSection />;
+    }
+  };
+
   return (
     <div className="sidebar-container">
       <div className="sidebar-header">
-        <h2 className="sidebar-title">Design Assets</h2>
+        <h2 className="sidebar-title">
+          {activeTab.charAt(0) + activeTab.slice(1)}
+        </h2>
       </div>
-
       <div className="sidebar-content">
-        <TemplatesSection />
-
-        {/* Images */}
-        <div className="sidebar-tool-section">
-          <h3>Decorative Images</h3>
-          <div className="sidebar-image-grid">
-            {[1, 2, 3, 4].map((i) => (
-              <img
-                key={i}
-                src={`https://picsum.photos/100/100?random=${i}`}
-                className="sidebar-draggable-image"
-                draggable
-                onDragStart={(e) =>
-                  handleDragStart(e, "image", {
-                    src: `https://picsum.photos/200/200?random=${i}`,
-                  })
-                }
-                title="Drag to canvas"
-              />
-            ))}
-          </div>
-        </div>
-
-        {/* Text and Upload */}
-        <div className="sidebar-tool-section app-spacer-top">
-          <h3>Tools & Uploads</h3>
-          <div style={{ display: 'flex', flexDirection: 'column', gap: '12px' }}>
-            <button
-                className="btn btn-secondary sidebar-full-width"
-                onClick={() => useStore.getState().addText()}
-            >
-                <Type size={18} />
-                <span>Add Custom Text</span>
-            </button>
-            <input
-                type="file"
-                ref={fileInputRef}
-                style={{ display: "none" }}
-                onChange={handleFileUpload}
-                accept="image/*"
-            />
-            <button
-                className="btn btn-primary sidebar-full-width"
-                onClick={() => fileInputRef.current.click()}
-            >
-                <Upload size={18} />
-                <span>Upload Artwork</span>
-            </button>
-          </div>
-        </div>
-        
-        <div className="sidebar-help-text">
-            Drag items onto the canvas or click them to add.
-        </div>
+        {renderTabContent()}
       </div>
     </div>
   );
 };
+
 
 export default Sidebar;
 

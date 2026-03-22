@@ -1,16 +1,25 @@
 import React from "react";
 import { Package } from "lucide-react";
 import useStore from "../store/useStore";
-import foodBoxUrl from "../templates/FOOD BOX.svg";
 import "./TemplatesSection.css";
+
+// Dynamic template discovery using Vite's glob import
+const templateFiles = import.meta.glob("../templates/*.svg", { eager: true });
 
 const TemplatesSection = () => {
     const { loadSvgTemplate } = useStore();
 
-    // In a real app, this could come from an API or a manifest file
-    const templatesList = [
-        { id: "food-box", name: "Food Box", url: foodBoxUrl, thumbnail: foodBoxUrl },
-    ];
+    // Map discovered files to the template list dynamically
+    const templatesList = Object.entries(templateFiles).map(([path, module]) => {
+        const fileName = path.split('/').pop().replace('.svg', '');
+        const url = module.default;
+        return {
+            id: fileName.toLowerCase().replace(/\s+/g, '-'),
+            name: fileName,
+            url: url,
+            thumbnail: url
+        };
+    });
 
     const handleDragStart = (e, url) => {
         e.dataTransfer.setData("type", "svg-template");

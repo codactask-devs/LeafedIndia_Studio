@@ -11,27 +11,36 @@ const ImagesSection = () => {
     const [loading, setLoading] = useState(false);
     const [page, setPage] = useState(1);
 
-    // Initial stock images for first load
+    // Using LoremFlickr for initial load too - much more stable than static Unsplash IDs
     const initialImages = [
-        "https://images.unsplash.com/photo-1579353977828-2a4eab540b9a?w=400&q=80",
-        "https://images.unsplash.com/photo-1541963463532-d68292c34b19?w=400&q=80",
-        "https://images.unsplash.com/photo-1503023345030-a7c39a75d0b4?w=400&q=80",
-        "https://images.unsplash.com/photo-1518709268805-4e9042af9f23?w=400&q=80",
-        "https://images.unsplash.com/photo-1544005313-94ddf0286df2?w=400&q=80",
-        "https://images.unsplash.com/photo-1506744038136-46273834b3fb?w=400&q=80",
+        "https://loremflickr.com/320/320/design?lock=1",
+        "https://loremflickr.com/320/320/food?lock=2",
+        "https://loremflickr.com/320/320/nature?lock=3",
+        "https://loremflickr.com/320/320/abstract?lock=4",
+        "https://loremflickr.com/320/320/business?lock=5",
+        "https://loremflickr.com/320/320/creative?lock=6",
     ];
 
     useEffect(() => {
         setImages(initialImages);
     }, []);
 
+    const handleImageError = (e) => {
+        // If image fails, replace with a colored placeholder or a generic pattern
+        e.target.src = `https://via.placeholder.com/320x320/f1f5f9/94a3b8?text=Image+Unavailable`;
+    };
+
     const handleSearch = (e) => {
-        e.preventDefault();
+        if (e) e.preventDefault();
+        if (!searchQuery.trim()) {
+            setImages(initialImages);
+            return;
+        }
+
         setLoading(true);
-        // Using a keyword-based randomizer for demo purposes without requiring a key instantly
-        // To build a production search, use Unsplash API: https://unsplash.com/documentation#search-photos
+        // Using LoremFlickr for better reliability than source.unsplash
         const newImages = Array.from({ length: 12 }, (_, i) => 
-            `https://source.unsplash.com/featured/300x300?${searchQuery || 'nature'}&sig=${Math.random() + i}`
+            `https://loremflickr.com/320/320/${searchQuery}?lock=${Math.floor(Math.random() * 1000) + i}`
         );
         
         setTimeout(() => {
@@ -41,10 +50,17 @@ const ImagesSection = () => {
         }, 800);
     };
 
+    const handleClearSearch = () => {
+        setSearchQuery("");
+        setImages(initialImages);
+        setPage(1);
+    };
+
     const loadMore = () => {
         setLoading(true);
+        const query = searchQuery || 'design';
         const moreImages = Array.from({ length: 8 }, (_, i) => 
-            `https://source.unsplash.com/featured/300x300?${searchQuery || 'design'}&sig=${Math.random() + i + (page * 10)}`
+            `https://loremflickr.com/320/320/${query}?lock=${Math.floor(Math.random() * 1000) + (page * 12) + i}`
         );
         
         setTimeout(() => {
@@ -80,14 +96,22 @@ const ImagesSection = () => {
         <div className="sidebar-section-container">
             <div className="sidebar-search-block">
                 <form className="sidebar-search-container" onSubmit={handleSearch}>
-                    <Search size={16} className="search-icon" />
                     <input 
-                        type="search" 
-                        placeholder="Search assets (e.g. box, food, leaf)..." 
+                        type="text" 
+                        placeholder="Try 'box', 'food', 'nature'..." 
                         className="sidebar-search-input"
                         value={searchQuery}
-                        onChange={(e) => setSearchQuery(e.target.value)}
+                        onChange={(e) => {
+                            setSearchQuery(e.target.value);
+                            if (e.target.value === "") setImages(initialImages);
+                        }}
                     />
+                    {searchQuery && (
+                        <button type="button" className="clear-search-btn" onClick={handleClearSearch}>×</button>
+                    )}
+                    <button type="submit" className="search-submit-btn">
+                        <Search size={18} />
+                    </button>
                 </form>
                 
                 <input
@@ -116,7 +140,7 @@ const ImagesSection = () => {
                 <div className="sidebar-image-grid">
                     {images.map((src, i) => (
                         <div 
-                            key={i} 
+                            key={`${src}-${i}`} 
                             className="sidebar-image-item premium-shadow"
                             onClick={() => addObject({ type: "image", src, x: 100, y: 100, width: 250, height: 250 })}
                         >
@@ -128,6 +152,7 @@ const ImagesSection = () => {
                                     e.dataTransfer.setData("type", "image");
                                     e.dataTransfer.setData("payload", JSON.stringify({ src }));
                                 }}
+                                onError={handleImageError}
                                 alt={`curated-${i}`}
                             />
                         </div>
@@ -139,14 +164,14 @@ const ImagesSection = () => {
                     onClick={loadMore} 
                     disabled={loading}
                 >
-                    {loading ? "Discovering..." : "Discover More"}
+                    {loading ? "Searching..." : "Show More Results"}
                     <PlusCircle size={14} style={{ marginLeft: '8px' }} />
                 </button>
             </div>
             
             <div className="sidebar-footer-info">
                 <Sparkles size={12} />
-                <span>Powered by Unsplash Visual Search</span>
+                <span>Powered by Intelligent Visual Search</span>
             </div>
         </div>
     );

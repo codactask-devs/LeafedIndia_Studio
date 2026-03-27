@@ -18,14 +18,44 @@ const URLImage = ({ src, ...props }) => {
   return <KonvaImage image={image} {...props} />;
 };
 
-const SelectionControls = ({ object, onDelete, onDuplicate }) => {
+const SelectionControls = ({ object, onDelete, onDuplicate, stageRef }) => {
     const [hovered, setHovered] = useState(null); // 'duplicate' | 'delete' | null
-    const width = (object.width || 150) * (object.scaleX || 1);
-    const offsetX = width / 2;
+    
+    // Get actual width from the node if possible for better accuracy
+    let actualWidth = 0;
+    if (stageRef && stageRef.current) {
+      const node = stageRef.current.findOne("#" + object.id);
+      if (node) {
+        // Use the width of the node multiplied by its scale
+        actualWidth = node.width() * node.scaleX();
+      }
+    }
+
+    // Fallback if node not found or stage not ready
+    if (!actualWidth) {
+      if (object.type === "text") {
+        const charWidth = (object.fontSize || 24) * 0.5;
+        const textLength = (object.text || "").length;
+        actualWidth = (textLength * charWidth) * (object.scaleX || 1);
+      } else {
+        actualWidth = (object.width || 150) * (object.scaleX || 1);
+      }
+    }
+    
+    // Position the container so it stays at the right edge
+    // To avoid hiding the rotate handle (which is at actualWidth/2, y ≈ -40),
+    // we ensure the controls are either to the right of center or far enough up.
+    // We'll position it so its right edge aligns with the object's right edge,
+    // but with a minimum offset from the center to clear the rotate handle.
+    const offsetX = Math.max(actualWidth - 90, (actualWidth / 2) + 15);
     
     return (
       <Group x={object.x} y={object.y} rotation={object.rotation}>
-        <Group x={offsetX - 45} y={-55}>
+        <Group 
+          x={offsetX} 
+          y={-75} // Moved higher up to clear the rotate handle completely
+          rotation={-object.rotation} // Counter-rotate to keep buttons horizontal
+        >
           {/* Main Container Bar */}
           <Rect
             width={90}
@@ -264,12 +294,28 @@ const CanvasArea = ({ stageRef }) => {
                     onTap: () => {
                       if (editingId !== obj.id) selectObject(obj.id);
                     },
+                    onDragMove: (e) => {
+                      updateObject(obj.id, {
+                        x: e.target.x(),
+                        y: e.target.y(),
+                      });
+                    },
                     onDragEnd: (e) => {
                       updateObject(obj.id, {
                         x: e.target.x(),
                         y: e.target.y(),
                       });
                       saveHistory();
+                    },
+                    onTransform: (e) => {
+                      const node = e.target;
+                      updateObject(obj.id, {
+                        x: node.x(),
+                        y: node.y(),
+                        rotation: node.rotation(),
+                        scaleX: node.scaleX(),
+                        scaleY: node.scaleY(),
+                      });
                     },
                     onTransformEnd: (e) => {
                       const node = e.target;
@@ -350,6 +396,7 @@ const CanvasArea = ({ stageRef }) => {
                   object={objects.find(o => o.id === selectedId)}
                   onDelete={() => deleteObject(selectedId)}
                   onDuplicate={() => duplicateObject(selectedId)}
+                  stageRef={stageRef}
                 />
             )}
           </Layer>

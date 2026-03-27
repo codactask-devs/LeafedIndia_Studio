@@ -9,7 +9,7 @@ const useStore = create((set, get) => ({
   historyStep: 0,
   currentTemplate: null,
   activeTab: "templates", // "templates", "images", "text"
-  isSidebarOpen: true,
+  isSidebarOpen: false,
 
   setTemplate: (template) => set({ currentTemplate: template }),
   setActiveTab: (tab) => set({ activeTab: tab, isSidebarOpen: true }),

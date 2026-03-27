@@ -1,0 +1,123 @@
+.quick-action-overlay {
+    position: absolute;
+    inset: 0;
+    background: rgba(248, 250, 252, 0.85);
+    backdrop-filter: blur(8px);
+    z-index: 1000;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.quick-action-panel {
+    width: 500px;
+    padding: 32px;
+    font-family: 'Outfit', 'Montserrat', sans-serif;
+    animation: fadeInScale 0.4s cubic-bezier(0.16, 1, 0.3, 1);
+    /* remove the background and border of the panel itself */
+    background: white;
+    border: 1px solid #e2e8f0;
+    box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.05);
+    border-radius: 16px;
+}
+
+@keyframes fadeInScale {
+    from { opacity: 0; transform: scale(0.95); }
+    to { opacity: 1; transform: scale(1); }
+}
+
+.quick-action-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 8px;
+}
+
+.quick-action-header h3 {
+    margin: 0;
+    font-size: 24px;
+    color: #1e293b;
+    font-weight: 700;
+}
+
+.close-btn {
+    background: none;
+    border: none;
+    cursor: pointer;
+    color: #64748b;
+    padding: 8px;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transition: background 0.2s, color 0.2s;
+}
+
+.close-btn:hover {
+    background: rgba(0, 0, 0, 0.05);
+    color: #0f172a;
+}
+
+.quick-action-subtitle {
+    margin: 0 0 24px 0;
+    font-size: 16px;
+    color: #475569;
+}
+
+.quick-action-templates {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 16px;
+    max-height: 70vh;
+    overflow-y: auto;
+    padding-right: 4px;
+    padding: 20px;
+}
+
+.quick-action-templates::-webkit-scrollbar {
+    width: 6px;
+}
+
+.quick-action-templates::-webkit-scrollbar-thumb {
+    background: #cbd5e1;
+    border-radius: 6px;
+}
+
+.quick-action-item {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    gap: 12px;
+    aspect-ratio: 1;
+    background: white;
+    border: 1px solid #e2e8f0;
+    border-radius: 16px;
+    cursor: pointer;
+    transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1);
+    color: #475569;
+    box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.05);
+}
+
+.quick-action-item svg {
+    color: #8b5cf6;
+    transition: transform 0.2s ease;
+}
+
+.quick-action-item:hover {
+    border-color: #8b5cf6;
+    background: white;
+    color: #8b5cf6;
+    transform: translateY(-4px);
+    box-shadow: 0 10px 15px -3px rgba(139, 92, 246, 0.15);
+}
+
+.quick-action-item:hover svg {
+    transform: scale(1.1);
+}
+
+.quick-action-item .template-name {
+    font-weight: 600;
+    font-size: 12px;
+    text-align: center;
+}

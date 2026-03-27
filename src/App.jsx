@@ -5,6 +5,7 @@ import LeftSidebar from "./components/LeftSidebar";
 import Sidebar from "./components/Sidebar";
 import CanvasArea from "./components/CanvasArea";
 import Toolbar from "./components/Toolbar";
+import QuickAction from "./components/QuickAction";
 import useStore from "./store/useStore";
 import "./App.css";
 
@@ -13,13 +14,6 @@ function App() {
   const loadSvgTemplate = useStore((state) => state.loadSvgTemplate);
 
   const stageRef = useRef(null);
-
-  // Auto-load food box template on mount
-  React.useEffect(() => {
-    import("./templates/FOOD BOX.svg").then(module => {
-       loadSvgTemplate(100, 100, module.default);
-    });
-  }, [loadSvgTemplate]);
   
   // Email Modal State
   const [showModal, setShowModal] = useState(false);
@@ -163,6 +157,7 @@ function App() {
           onDragOver={handleDragOver}
         >
           <CanvasArea stageRef={stageRef} />
+          <QuickAction />
         </main>
       </div>
     </div>

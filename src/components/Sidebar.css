@@ -1,14 +1,57 @@
 .sidebar-container {
-  width: 330px;
   background-color: #ffffff;
   border-right: 1px solid #e2e8f0;
   display: flex;
   flex-direction: column;
   height: 100%;
-  overflow: hidden; /* Header fixed, content scrolls */
+  overflow: visible; /* Changed from hidden to show toggle button */
   box-shadow: 2px 0 20px rgba(0, 0, 0, 0.05);
   position: relative;
   z-index: 50;
+  transition: width 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+.sidebar-container.open {
+  width: 330px;
+}
+
+.sidebar-container.closed {
+  width: 0;
+  border-right: none;
+}
+
+.sidebar-container.closed > .sidebar-header,
+.sidebar-container.closed > .sidebar-content,
+.sidebar-container.closed > .sidebar-header-row {
+  opacity: 0;
+  pointer-events: none;
+}
+
+.sidebar-toggle-btn {
+  position: absolute;
+  top: 50%;
+  right: -24px;
+  transform: translateY(-50%);
+  width: 24px;
+  height: 48px;
+  background-color: #ffffff;
+  border: 1px solid #e2e8f0;
+  border-left: none;
+  border-radius: 0 8px 8px 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  color: #64748b;
+  z-index: 100;
+  box-shadow: 4px 0 6px -1px rgba(0, 0, 0, 0.05);
+  transition: color 0.2s, background-color 0.2s;
+  padding: 0;
+}
+
+.sidebar-toggle-btn:hover {
+  background-color: #f8fafc;
+  color: #3b82f6;
 }
 
 .sidebar-properties {
@@ -19,6 +62,8 @@
   padding: 24px;
   border-bottom: 1px solid #f1f5f9;
   flex-shrink: 0;
+  width: 330px; /* Force width */
+  transition: opacity 0.2s;
 }
 
 .sidebar-header-row {
@@ -28,6 +73,8 @@
   align-items: center;
   gap: 12px;
   flex-shrink: 0;
+  width: 330px; /* Force width */
+  transition: opacity 0.2s;
 }
 
 .sidebar-back-btn {
@@ -72,6 +119,8 @@
   flex: 1;
   overflow-y: auto; /* Correct scroll location */
   overflow-x: hidden;
+  width: 330px; /* Force width to prevent content reflow during transform */
+  transition: opacity 0.2s;
 }
 
 /* Hide scrollbar but keep functionality */
@@ -332,10 +381,12 @@
   height: 6px;
   background: #e2e8f0;
   border-radius: 3px;
+  appearance: none;
   -webkit-appearance: none;
 }
 
 .sidebar-range-premium::-webkit-slider-thumb {
+  appearance: none;
   -webkit-appearance: none;
   width: 18px;
   height: 18px;
@@ -678,10 +729,12 @@
   height: 4px;
   background: #e2e8f0;
   border-radius: 2px;
+  appearance: none;
   -webkit-appearance: none;
 }
 
 .sidebar-range::-webkit-slider-thumb {
+  appearance: none;
   -webkit-appearance: none;
   width: 16px;
   height: 16px;

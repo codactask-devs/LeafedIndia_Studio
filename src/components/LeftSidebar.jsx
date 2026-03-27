@@ -15,7 +15,6 @@ const LeftSidebar = () => {
   const menuItems = [
     { id: "templates", icon: LayoutGrid, label: "Templates" },
     { id: "images", icon: ImageIcon, label: "Images" },
-    { id: "clipart", icon: Smile, label: "Clipart" },
     { id: "text", icon: Type, label: "Text" },
   ];
 

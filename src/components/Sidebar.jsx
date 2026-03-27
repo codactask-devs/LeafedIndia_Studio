@@ -12,8 +12,8 @@ import {
 import useStore from "../store/useStore";
 import TemplatesSection from "./TemplatesSection";
 import ImagesSection from "./ImagesSection";
-import ClipartSection from "./ClipartSection";
 import TextSection from "./TextSection";
+import { ChevronRight } from "lucide-react";
 import "./Sidebar.css";
 
 const Sidebar = () => {
@@ -27,6 +27,8 @@ const Sidebar = () => {
     duplicateObject,
     selectObject,
     activeTab,
+    isSidebarOpen,
+    toggleSidebar,
   } = useStore();
 
   const selectedObject = objects.find((o) => o.id === selectedId);
@@ -34,7 +36,10 @@ const Sidebar = () => {
   // If an object is selected, show its properties
   if (selectedObject) {
     return (
-      <div className="sidebar-container sidebar-properties">
+      <div className={`sidebar-container sidebar-properties ${isSidebarOpen ? 'open' : 'closed'}`}>
+        <button className="sidebar-toggle-btn" onClick={toggleSidebar} title={isSidebarOpen ? "Close Sidebar" : "Open Sidebar"}>
+           {isSidebarOpen ? <ChevronLeft size={16}/> : <ChevronRight size={16}/>}
+        </button>
         <div className="sidebar-header-row">
           <button
             className="sidebar-back-btn"
@@ -257,7 +262,7 @@ const Sidebar = () => {
       case "images":
         return <ImagesSection />;
       case "clipart":
-        return <ClipartSection />;
+        return null; // Clipart removed
       case "text":
         return <TextSection />;
       default:
@@ -266,7 +271,10 @@ const Sidebar = () => {
   };
 
   return (
-    <div className="sidebar-container">
+    <div className={`sidebar-container ${isSidebarOpen ? 'open' : 'closed'}`}>
+      <button className="sidebar-toggle-btn" onClick={toggleSidebar} title={isSidebarOpen ? "Close Sidebar" : "Open Sidebar"}>
+        {isSidebarOpen ? <ChevronLeft size={16}/> : <ChevronRight size={16}/>}
+      </button>
       <div className="sidebar-header">
         <h2 className="sidebar-title">
           {activeTab.charAt(0).toUpperCase() + activeTab.slice(1)}

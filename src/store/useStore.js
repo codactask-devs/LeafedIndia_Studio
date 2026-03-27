@@ -9,10 +9,12 @@ const useStore = create((set, get) => ({
   historyStep: 0,
   currentTemplate: null,
   activeTab: "templates", // "templates", "images", "text"
+  isSidebarOpen: true,
 
   setTemplate: (template) => set({ currentTemplate: template }),
-  setActiveTab: (tab) => set({ activeTab: tab }),
-
+  setActiveTab: (tab) => set({ activeTab: tab, isSidebarOpen: true }),
+  toggleSidebar: () => set((state) => ({ isSidebarOpen: !state.isSidebarOpen })),
+  setSidebarOpen: (isOpen) => set({ isSidebarOpen: isOpen }),
 
   loadSvgTemplate: async (x, y, url) => {
     try {

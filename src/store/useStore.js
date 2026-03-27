@@ -99,7 +99,11 @@ const useStore = create((set, get) => ({
     set({ history: newHistory, historyStep: newHistory.length - 1 });
   },
 
-  selectObject: (id) => set({ selectedId: id }),
+  selectObject: (id) => set((state) => ({
+    selectedId: id,
+    // Auto-open the sidebar whenever an object is selected
+    isSidebarOpen: id !== null ? true : state.isSidebarOpen,
+  })),
 
   deleteObject: (id) => {
     const { objects, saveHistory } = get();

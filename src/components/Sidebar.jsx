@@ -51,43 +51,50 @@ const Sidebar = () => {
           <h2 className="sidebar-title-inline">Edit {selectedObject.type === 'svg-path' ? 'Shape' : selectedObject.type}</h2>
           
           <div className="header-actions-right">
-            <button
-                className="header-action-btn"
-                onClick={() => duplicateObject(selectedId)}
-                title="Duplicate"
-              >
-                <Copy size={16} />
-              </button>
-              <button
-                className="header-action-btn delete-btn"
-                onClick={() => deleteObject(selectedId)}
-                title="Delete"
-              >
-                <Trash size={16} />
-              </button>
+            {!['svg-path', 'svg-container'].includes(selectedObject.type) && (
+              <>
+                <button
+                    className="header-action-btn"
+                    onClick={() => duplicateObject(selectedId)}
+                    title="Duplicate"
+                  >
+                    <Copy size={16} />
+                  </button>
+                  <button
+                    className="header-action-btn delete-btn"
+                    onClick={() => deleteObject(selectedId)}
+                    title="Delete"
+                  >
+                    <Trash size={16} />
+                  </button>
+              </>
+            )}
           </div>
         </div>
 
         <div className="sidebar-content">
-          <div className="sidebar-tool-section">
-            <h3 className="sidebar-property-label">Order & Layout</h3>
-            <div className="app-button-grid" style={{ gridTemplateColumns: '1fr 1fr' }}>
-              <button
-                className="btn btn-secondary btn-sm"
-                onClick={() => bringToFront(selectedId)}
-                title="Bring to Front"
-              >
-                <ArrowUp size={16} /> <span>Move Front</span>
-              </button>
-              <button
-                className="btn btn-secondary btn-sm"
-                onClick={() => sendToBack(selectedId)}
-                title="Send to Back"
-              >
-                <ArrowDown size={16} /> <span>Move Back</span>
-              </button>
+          {/* Only show Order & Layout for non-template objects */}
+          {!['svg-path', 'svg-container'].includes(selectedObject.type) && (
+            <div className="sidebar-tool-section">
+              <h3 className="sidebar-property-label">Order & Layout</h3>
+              <div className="app-button-grid" style={{ gridTemplateColumns: '1fr 1fr' }}>
+                <button
+                  className="btn btn-secondary btn-sm"
+                  onClick={() => bringToFront(selectedId)}
+                  title="Bring to Front"
+                >
+                  <ArrowUp size={16} /> <span>Move Front</span>
+                </button>
+                <button
+                  className="btn btn-secondary btn-sm"
+                  onClick={() => sendToBack(selectedId)}
+                  title="Send to Back"
+                >
+                  <ArrowDown size={16} /> <span>Move Back</span>
+                </button>
+              </div>
             </div>
-          </div>
+          )}
 
           {/* Shape Properties */}
           {selectedObject.type === "svg-path" && (

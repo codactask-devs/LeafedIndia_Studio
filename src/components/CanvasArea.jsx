@@ -104,6 +104,7 @@ const SelectionControls = ({ object, onDelete, onDuplicate }) => {
     );
   };
 
+
 const CanvasArea = ({ stageRef }) => {
   const {
     objects,
@@ -235,6 +236,7 @@ const CanvasArea = ({ stageRef }) => {
                     rotation={obj.rotation}
                     onClick={() => selectObject(obj.id)}
                     onTap={() => selectObject(obj.id)}
+                    opacity={selectedId === obj.id ? 0.8 : 1}
                   />
                 ))}
             </Group>
@@ -323,8 +325,8 @@ const CanvasArea = ({ stageRef }) => {
                     y={obj.y}
                     data={obj.data}
                     fill="transparent"
-                    stroke={obj.stroke || "#2B2A29"}
-                    strokeWidth={1.5}
+                    stroke={selectedId === obj.id ? "#3b82f6" : (obj.stroke || "#2B2A29")}
+                    strokeWidth={selectedId === obj.id ? 3 : 1.5}
                     scaleX={obj.scaleX}
                     scaleY={obj.scaleY}
                     rotation={obj.rotation}

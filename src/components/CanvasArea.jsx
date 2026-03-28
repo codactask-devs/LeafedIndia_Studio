@@ -14,7 +14,7 @@ import useStore from "../store/useStore";
 import "./CanvasArea.css";
 
 const URLImage = ({ src, ...props }) => {
-  const [image] = useImage(src);
+  const [image] = useImage(src, "anonymous");
   return <KonvaImage image={image} {...props} />;
 };
 

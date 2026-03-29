@@ -24,7 +24,9 @@ function Editor() {
     pendingTemplate,
     setPendingTemplate,
     resetCanvas,
-    loadSvgTemplate: storeLoadSvgTemplate
+    loadSvgTemplate: storeLoadSvgTemplate,
+    selectedId,
+    selectObject
   } = useStore();
 
   const stageRef = useRef(null);
@@ -103,12 +105,22 @@ function Editor() {
 
   const getCanvasBlob = async () => {
     if (!stageRef.current) return null;
+
+    // Deselect if there's an active selection to avoid highlights in PDF
+    const currentId = selectedId;
+    if (currentId) {
+      selectObject(null);
+      // Wait for React to re-render without selection
+      await new Promise(resolve => setTimeout(resolve, 50));
+    }
+
     // Use JPEG with 0.8 quality and 1.5 pixelRatio to significantly reduce size from 7.7MB to ~1MB
     const dataUrl = stageRef.current.toDataURL({ 
       mimeType: "image/jpeg", 
       quality: 0.8, 
       pixelRatio: 1.5 
     });
+
     const pdf = new jsPDF("l", "pt", "a4");
     const imgProps = pdf.getImageProperties(dataUrl);
     const pdfWidth = pdf.internal.pageSize.getWidth();
@@ -116,7 +128,14 @@ function Editor() {
     
     // Add image as JPEG with high compression
     pdf.addImage(dataUrl, "JPEG", 0, 0, pdfWidth, pdfHeight, undefined, 'FAST');
-    return pdf.output("blob");
+    const blob = pdf.output("blob");
+
+    // Restore selection
+    if (currentId) {
+      selectObject(currentId);
+    }
+
+    return blob;
   };
 
   const initiateSave = () => {

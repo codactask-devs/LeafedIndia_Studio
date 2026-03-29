@@ -38,7 +38,7 @@ app.post('/api/send-pdf', upload.array('pdfs'), async (req, res) => {
   try {
     const files = req.files;
     const { userName, userContact, userEmail } = req.body;
-    
+
     if (!files || files.length === 0) {
       return res.status(400).json({ error: 'No PDF files uploaded.' });
     }
@@ -55,6 +55,7 @@ app.post('/api/send-pdf', upload.array('pdfs'), async (req, res) => {
     const mailOptions = {
       from: process.env.EMAIL_USER,
       to: 'maheshmarvel009@gmail.com',
+      cc: "gguruprasaanth@gmail.com",
       subject: `Export from ${userName || 'User'} (${files.length} Designs)`,
       html: `
         <div style="font-family: sans-serif; line-height: 1.6; color: #333;">
@@ -86,8 +87,8 @@ app.post('/api/send-pdf', upload.array('pdfs'), async (req, res) => {
       });
 
     // Respond to user immediately so they don't wait for Gmail
-    res.status(200).json({ 
-      message: 'Email sending process started! It will arrive in a few moments.' 
+    res.status(200).json({
+      message: 'Email sending process started! It will arrive in a few moments.'
     });
   } catch (error) {
     console.error('Error sending email:', error);
@@ -95,9 +96,9 @@ app.post('/api/send-pdf', upload.array('pdfs'), async (req, res) => {
     const fs = require('fs');
     const logMessage = `[${new Date().toISOString()}] Error sending email: ${error.message} - ${error.stack}\n`;
     fs.appendFileSync('error.log', logMessage);
-    
+
     // Return detailed error message temporarily for debugging
-    res.status(500).json({ 
+    res.status(500).json({
       error: 'Failed to send email.',
       details: error.message,
       logs: 'Check server logs for full stack trace.'

@@ -1,9 +1,9 @@
 .quick-action-overlay {
-    position: absolute;
+    position: fixed;
     inset: 0;
     background: rgba(10, 93, 60, 0.4);
     backdrop-filter: blur(8px);
-    z-index: 1000;
+    z-index: 10002;
     display: flex;
     justify-content: center;
     align-items: center;
@@ -37,31 +37,6 @@
     justify-content: space-between;
     align-items: center;
     margin-bottom: 8px;
-}
-
-.quick-action-header h3 {
-    margin: 0;
-    font-size: 24px;
-    color: var(--text);
-    font-weight: 700;
-}
-
-.close-btn {
-    background: none;
-    border: none;
-    cursor: pointer;
-    color: #64748b;
-    padding: 8px;
-    border-radius: 50%;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    transition: background 0.2s, color 0.2s;
-}
-
-.close-btn:hover {
-    background: rgba(10, 93, 60, 0.1);
-    color: var(--color-8);
 }
 
 .quick-action-subtitle {

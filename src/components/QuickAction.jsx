@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import { Package, X } from "lucide-react";
+import { Package } from "lucide-react";
 import useStore from "../store/useStore";
 import "./QuickAction.css";
 
@@ -31,9 +31,6 @@ const QuickAction = () => {
             <div className="quick-action-panel">
             <div className="quick-action-header">
                 <h3>Quick Start</h3>
-                <button className="close-btn" onClick={() => setIsVisible(false)}>
-                    <X size={20} />
-                </button>
             </div>
             <p className="quick-action-subtitle">Select a template to begin</p>
             <div className="quick-action-templates">

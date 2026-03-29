@@ -40,28 +40,28 @@ const Toolbar = ({ onExport, onSave, onToggleSavedList }) => {
 
             <div className="toolbar-right-actions">
                 {savedDesigns.length > 0 && (
-                    <button 
-                      className="btn btn-outline-secondary toolbar-saved-list-btn" 
-                      onClick={onToggleSavedList}
-                      title="View Saved Attachments"
+                    <button
+                        className="btn btn-outline-secondary toolbar-saved-list-btn"
+                        onClick={onToggleSavedList}
+                        title="View Saved Attachments"
                     >
                         <List size={18} />
                         <span>Attachments ({savedDesigns.length})</span>
                     </button>
                 )}
-                
-                <button 
-                  className={`btn ${hasChanges ? "btn-success" : "btn-outline-success"} toolbar-save-btn`} 
-                  onClick={onSave}
-                  title="Save current design"
+
+                <button
+                    className={`btn ${hasChanges ? "btn-success" : "btn-outline-success"} toolbar-save-btn`}
+                    onClick={onSave}
+                    title="Save current design"
                 >
                     <Save size={18} />
-                    <span>{hasChanges ? "Save Changes" : "Saved"}</span>
+                    <span>{hasChanges ? "Save Changes" : "Save"}</span>
                 </button>
 
                 <button className="btn btn-primary toolbar-export-btn" onClick={onExport}>
                     <Mail size={18} />
-                    <span>Export & Email ({totalCount})</span>
+                    <span>Email Design ({totalCount})</span>
                 </button>
             </div>
         </div>

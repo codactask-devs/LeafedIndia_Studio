@@ -11,10 +11,17 @@ const PORT = process.env.PORT || 5000;
 app.use(cors());
 app.use(express.json()); // Optional, for parsing application/json
 
-// Configure Multer for processing multipart/form-data
-// Using memoryStorage to keep the PDF blob in memory instead of writing to disk
 const storage = multer.memoryStorage();
 const upload = multer({ storage: storage });
+
+// Create mail transporter once
+const transporter = nodemailer.createTransport({
+  service: 'gmail',
+  auth: {
+    user: process.env.EMAIL_USER,
+    pass: process.env.EMAIL_PASS,
+  },
+});
 
 app.get('/', (req, res) => {
   res.send('PDF Emailer Backend is running!');
@@ -30,13 +37,8 @@ app.post('/api/send-pdf', upload.array('pdfs'), async (req, res) => {
       return res.status(400).json({ error: 'No PDF files uploaded.' });
     }
 
-    const transporter = nodemailer.createTransport({
-      service: 'gmail',
-      auth: {
-        user: process.env.EMAIL_USER,
-        pass: process.env.EMAIL_PASS,
-      },
-    });
+
+    // Attachments will now use the pre-created transporter
 
     const attachments = files.map((file) => ({
       filename: file.originalname, // Use original name passed from frontend
@@ -70,7 +72,17 @@ app.post('/api/send-pdf', upload.array('pdfs'), async (req, res) => {
     res.status(200).json({ message: 'Email sent successfully!' });
   } catch (error) {
     console.error('Error sending email:', error);
-    res.status(500).json({ error: 'Failed to send email. Check server logs.' });
+    // Log error to a file with timestamp
+    const fs = require('fs');
+    const logMessage = `[${new Date().toISOString()}] Error sending email: ${error.message} - ${error.stack}\n`;
+    fs.appendFileSync('error.log', logMessage);
+    
+    // Return detailed error message temporarily for debugging
+    res.status(500).json({ 
+      error: 'Failed to send email.',
+      details: error.message,
+      logs: 'Check server logs for full stack trace.'
+    });
   }
 });
 

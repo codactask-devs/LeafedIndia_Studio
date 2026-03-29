@@ -10,11 +10,35 @@ const useStore = create((set, get) => ({
   currentTemplate: null,
   activeTab: "templates", // "templates", "images", "text"
   isSidebarOpen: false,
+  savedDesigns: [], // Array of objects { id, name, blob }
+  hasChanges: false,
+  pendingTemplate: null,
+  showConfirmModal: false,
 
   setTemplate: (template) => set({ currentTemplate: template }),
   setActiveTab: (tab) => set({ activeTab: tab, isSidebarOpen: true }),
   toggleSidebar: () => set((state) => ({ isSidebarOpen: !state.isSidebarOpen })),
   setSidebarOpen: (isOpen) => set({ isSidebarOpen: isOpen }),
+  setHasChanges: (val) => set({ hasChanges: val }),
+  addSavedDesign: (design) => set((state) => ({ 
+    savedDesigns: [...state.savedDesigns, { ...design, id: uuidv4() }],
+    hasChanges: false 
+  })),
+  removeSavedDesign: (id) => set((state) => ({ 
+    savedDesigns: state.savedDesigns.filter(d => d.id !== id) 
+  })),
+  clearSavedDesigns: () => set({ savedDesigns: [] }),
+  resetCanvas: () => set({ 
+    objects: [], 
+    history: [[]], 
+    historyStep: 0, 
+    hasChanges: false, 
+    selectedId: null,
+    pendingTemplate: null,
+    showConfirmModal: false
+  }),
+  setPendingTemplate: (template) => set({ pendingTemplate: template }),
+  setShowConfirmModal: (val) => set({ showConfirmModal: val }),
 
   loadSvgTemplate: async (x, y, url) => {
     try {
@@ -48,7 +72,7 @@ const useStore = create((set, get) => ({
       const { objects, saveHistory } = get();
       const filteredObjects = objects.filter(o => o.type !== "svg-container" && o.type !== "svg-path");
       const newObjects = [...filteredObjects, ...pathObjects];
-      set({ objects: newObjects, selectedId: null });
+      set({ objects: newObjects, selectedId: null, hasChanges: false });
       saveHistory();
     } catch (error) {
       console.error("Failed to load SVG template", error);
@@ -67,7 +91,7 @@ const useStore = create((set, get) => ({
     };
 
     const { objects, saveHistory } = get();
-    set({ objects: [...objects, newObject], selectedId: newObject.id });
+    set({ objects: [...objects, newObject], selectedId: newObject.id, hasChanges: true });
     saveHistory();
   },
 
@@ -89,7 +113,7 @@ const useStore = create((set, get) => ({
     const newObjects = objects.map((obj) =>
       obj.id === id ? { ...obj, ...updates } : obj,
     );
-    set({ objects: newObjects });
+    set({ objects: newObjects, hasChanges: true });
   },
 
   saveHistory: () => {
@@ -107,7 +131,7 @@ const useStore = create((set, get) => ({
 
   deleteObject: (id) => {
     const { objects, saveHistory } = get();
-    set({ objects: objects.filter((o) => o.id !== id), selectedId: null });
+    set({ objects: objects.filter((o) => o.id !== id), selectedId: null, hasChanges: true });
     saveHistory();
   },
 
@@ -119,6 +143,7 @@ const useStore = create((set, get) => ({
         objects: history[prevStep],
         historyStep: prevStep,
         selectedId: null,
+        hasChanges: true,
       });
     }
   },
@@ -131,6 +156,7 @@ const useStore = create((set, get) => ({
         objects: history[nextStep],
         historyStep: nextStep,
         selectedId: null,
+        hasChanges: true,
       });
     }
   },
@@ -147,7 +173,7 @@ const useStore = create((set, get) => ({
       y: objectToClone.y + 20,
     };
 
-    set({ objects: [...objects, newObject], selectedId: newObject.id });
+    set({ objects: [...objects, newObject], selectedId: newObject.id, hasChanges: true });
     saveHistory();
   },
 
@@ -160,7 +186,7 @@ const useStore = create((set, get) => ({
     const [item] = newObjects.splice(index, 1);
     newObjects.push(item);
 
-    set({ objects: newObjects });
+    set({ objects: newObjects, hasChanges: true });
     saveHistory();
   },
 
@@ -173,7 +199,7 @@ const useStore = create((set, get) => ({
     const [item] = newObjects.splice(index, 1);
     newObjects.unshift(item);
 
-    set({ objects: newObjects });
+    set({ objects: newObjects, hasChanges: true });
     saveHistory();
   },
 }));

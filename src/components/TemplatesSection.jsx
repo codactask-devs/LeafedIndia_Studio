@@ -7,7 +7,7 @@ import "./TemplatesSection.css";
 const templateFiles = import.meta.glob("../templates/*.svg", { eager: true });
 
 const TemplatesSection = () => {
-    const { loadSvgTemplate } = useStore();
+    const { loadSvgTemplate, hasChanges, setShowConfirmModal, setPendingTemplate } = useStore();
 
     // Map discovered files to the template list dynamically
     const templatesList = Object.entries(templateFiles).map(([path, module]) => {
@@ -20,6 +20,15 @@ const TemplatesSection = () => {
             thumbnail: url
         };
     });
+
+    const handleTemplateClick = (template) => {
+        if (hasChanges) {
+            setPendingTemplate({ type: 'svg-template', x: 100, y: 100, url: template.url });
+            setShowConfirmModal(true);
+        } else {
+            loadSvgTemplate(100, 100, template.url);
+        }
+    };
 
     const handleDragStart = (e, url) => {
         e.dataTransfer.setData("type", "svg-template");
@@ -35,7 +44,7 @@ const TemplatesSection = () => {
                         className="templates-item"
                         draggable
                         onDragStart={(e) => handleDragStart(e, template.url)}
-                        onClick={() => loadSvgTemplate(100, 100, template.url)}
+                        onClick={() => handleTemplateClick(template)}
                         title={template.name}
                     >
                         <div className="template-preview-box">

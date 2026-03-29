@@ -14,6 +14,7 @@ import TemplatesSection from "./TemplatesSection";
 import ImagesSection from "./ImagesSection";
 import TextSection from "./TextSection";
 import { ChevronRight } from "lucide-react";
+import ColorPickerGrid from "./ColorPickerGrid";
 import "./Sidebar.css";
 
 const Sidebar = () => {
@@ -104,20 +105,10 @@ const Sidebar = () => {
               <div className="sidebar-property-column">
                 <label className="sidebar-label-sm">Fill Color</label>
                 <br/>
-                <div className="sidebar-color-row-premium">
-                  <div className="sidebar-color-picker-wrapper-lux">
-                    <input
-                      type="color"
-                      value={selectedObject.fill || "#4F46E5"}
-                      onChange={(e) => updateObject(selectedId, { fill: e.target.value })}
-                    />
-                  </div>
-                  <input
-                    type="text"
-                    className="sidebar-text-input-premium"
-                    value={selectedObject.fill || "#4F46E5"}
-                    onChange={(e) => updateObject(selectedId, { fill: e.target.value })}
-                    maxLength={7}
+                <div style={{ marginTop: '12px' }}>
+                  <ColorPickerGrid 
+                    color={selectedObject.fill || "#4F46E5"} 
+                    onChange={(c) => updateObject(selectedId, { fill: c })} 
                   />
                 </div>
               </div>
@@ -233,20 +224,10 @@ const Sidebar = () => {
 
                <div className="sidebar-property-column">
                     <label className="sidebar-label-sm">Color Signature</label>
-                    <div className="sidebar-color-row-premium">
-                        <div className="sidebar-color-picker-wrapper-lux">
-                            <input
-                                type="color"
-                                value={selectedObject.fill || "#000000"}
-                                onChange={(e) => updateObject(selectedId, { fill: e.target.value })}
-                            />
-                        </div>
-                        <input
-                            type="text"
-                            className="sidebar-text-input-premium"
-                            value={selectedObject.fill || "#000000"}
-                            onChange={(e) => updateObject(selectedId, { fill: e.target.value })}
-                            maxLength={7}
+                    <div style={{ marginTop: '12px' }}>
+                        <ColorPickerGrid 
+                            color={selectedObject.fill || "#000000"} 
+                            onChange={(c) => updateObject(selectedId, { fill: c })} 
                         />
                     </div>
                </div>

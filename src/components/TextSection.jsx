@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from "react";
 import useStore from "../store/useStore";
+import ColorPickerGrid from "./ColorPickerGrid";
 import "./Sidebar.css";
 
 const TextSection = () => {
@@ -149,20 +150,10 @@ const TextSection = () => {
 
                     <div className="sidebar-property-column">
                         <label className="sidebar-label-sm">Color Signature</label>
-                        <div className="sidebar-color-row-premium">
-                            <div className="sidebar-color-picker-wrapper-lux">
-                                <input
-                                    type="color"
-                                    value={selectedObject.fill || "#000000"}
-                                    onChange={(e) => updateObject(selectedId, { fill: e.target.value })}
-                                />
-                            </div>
-                            <input
-                                type="text"
-                                className="sidebar-text-input-premium"
-                                value={selectedObject.fill || "#000000"}
-                                onChange={(e) => updateObject(selectedId, { fill: e.target.value })}
-                                maxLength={7}
+                        <div style={{ marginTop: '12px' }}>
+                            <ColorPickerGrid 
+                                color={selectedObject.fill || "#000000"} 
+                                onChange={(c) => updateObject(selectedId, { fill: c })} 
                             />
                         </div>
                     </div>

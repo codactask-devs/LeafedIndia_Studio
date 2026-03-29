@@ -120,3 +120,73 @@
     opacity: 0.6;
     cursor: not-allowed;
 }
+
+/* ============================================================
+   MOBILE RESPONSIVE — Toolbar
+   ============================================================ */
+@media (max-width: 768px) {
+  .toolbar-container {
+    height: 56px;
+    padding: 0 8px;
+    gap: 4px;
+  }
+
+  .toolbar-logo {
+    font-size: 14px;
+    letter-spacing: -0.03em;
+    gap: 4px;
+  }
+
+  .toolbar-actions-wrapper {
+    gap: 2px;
+    padding: 2px;
+  }
+
+  .toolbar-icon-btn {
+    width: 28px;
+    height: 28px;
+  }
+
+  .toolbar-right-actions {
+    gap: 4px;
+  }
+
+  /* Hide text labels inside toolbar buttons on mobile */
+  .toolbar-export-btn span,
+  .toolbar-save-btn span,
+  .toolbar-saved-list-btn span {
+    display: none;
+  }
+
+  .toolbar-export-btn {
+    padding: 8px 12px;
+    font-size: 13px;
+    min-width: 38px;
+    border-radius: 10px;
+  }
+
+  .toolbar-save-btn {
+    padding: 8px 10px;
+    font-size: 13px;
+    min-width: 38px;
+    border-radius: 10px;
+  }
+
+  .toolbar-saved-list-btn {
+    padding: 8px 10px;
+    font-size: 13px;
+    min-width: 38px;
+    border-radius: 10px;
+  }
+}
+
+@media (max-width: 400px) {
+  .toolbar-logo {
+    font-size: 13px;
+    max-width: 100px;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+  }
+}
+

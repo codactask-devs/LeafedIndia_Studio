@@ -60,6 +60,59 @@
   to { opacity: 1; transform: translateY(0) scale(1); }
 }
 
+/* ============================================================
+   MOBILE RESPONSIVE — Main Layout & Modals
+   ============================================================ */
+@media (max-width: 768px) {
+  .app-content-layout {
+    flex-direction: column;
+    height: calc(100vh - 56px - 60px); /* Adjust for 56px Toolbar + 60px BottomNav */
+  }
+
+  /* Modals on Mobile */
+  .app-modal-content, .modal-content {
+    width: 95% !important;
+    max-width: 400px !important;
+    padding: 30px 20px !important;
+    border-radius: 24px !important;
+  }
+
+  .modal-content h3 {
+    font-size: 1.2rem !important;
+  }
+
+  .modal-footer {
+    flex-direction: column;
+    gap: 8px;
+  }
+
+  .modal-footer button {
+    width: 100%;
+  }
+
+  /* User modal specific spacing */
+  .user-modal .form-group {
+    margin-bottom: 1rem;
+  }
+
+  /* Attachments popup on mobile */
+  .attachments-popup {
+    top: auto;
+    bottom: 130px; /* Above BottomNav and Sidebar area */
+    right: 10px;
+    left: 10px;
+    width: auto;
+    max-height: 40vh;
+  }
+
+  /* Canvas area padding on mobile to clear floating buttons/nav */
+  .canvas-workspace {
+    padding: 10px !important;
+    align-items: flex-start; /* Better for small screens with auto scaling */
+  }
+}
+
+
 .app-modal-content h2 {
   font-size: 28px;
   font-weight: 800;

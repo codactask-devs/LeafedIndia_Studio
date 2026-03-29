@@ -55,6 +55,16 @@ body {
   color: var(--text);
   overflow: hidden;
   -webkit-font-smoothing: antialiased;
+  -webkit-tap-highlight-color: transparent;
+  touch-action: manipulation;
+}
+
+/* Mobile: allow vertical scrolling on body */
+@media (max-width: 768px) {
+  body {
+    overflow-x: hidden;
+    overflow-y: hidden;
+  }
 }
 
 /* Global Buttons */

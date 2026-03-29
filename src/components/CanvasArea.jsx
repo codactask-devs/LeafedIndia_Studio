@@ -20,6 +20,7 @@ const URLImage = ({ src, ...props }) => {
 
 const SelectionControls = ({ object, onDelete, onDuplicate, stageRef }) => {
     const [hovered, setHovered] = useState(null); // 'duplicate' | 'delete' | null
+    const isMobile = window.innerWidth <= 768;
     
     // Get actual width from the node if possible for better accuracy
     let actualWidth = 0;
@@ -45,9 +46,8 @@ const SelectionControls = ({ object, onDelete, onDuplicate, stageRef }) => {
     // Position the container so it stays at the right edge
     // To avoid hiding the rotate handle (which is at actualWidth/2, y ≈ -40),
     // we ensure the controls are either to the right of center or far enough up.
-    // We'll position it so its right edge aligns with the object's right edge,
-    // but with a minimum offset from the center to clear the rotate handle.
-    const offsetX = Math.max(actualWidth - 90, (actualWidth / 2) + 15);
+    const controlWidth = isMobile ? 120 : 90;
+    const offsetX = Math.max(actualWidth - controlWidth, (actualWidth / 2) + 15);
     
     return (
       <Group x={object.x} y={object.y} rotation={object.rotation}>
@@ -58,8 +58,8 @@ const SelectionControls = ({ object, onDelete, onDuplicate, stageRef }) => {
         >
           {/* Main Container Bar */}
           <Rect
-            width={90}
-            height={40}
+            width={isMobile ? 120 : 90}
+            height={isMobile ? 50 : 40}
             fill="white"
             cornerRadius={12}
             shadowColor="black"
@@ -73,7 +73,7 @@ const SelectionControls = ({ object, onDelete, onDuplicate, stageRef }) => {
           <Group 
             onClick={onDuplicate} 
             onTap={onDuplicate} 
-            x={10} y={6} 
+            x={isMobile ? 12 : 10} y={isMobile ? 8 : 6} 
             cursor="pointer"
             onMouseEnter={() => setHovered('duplicate')}
             onMouseLeave={() => setHovered(null)}
@@ -84,7 +84,7 @@ const SelectionControls = ({ object, onDelete, onDuplicate, stageRef }) => {
           >
             {/* Hover Background */}
             <Rect 
-              width={30} height={30} 
+              width={isMobile ? 40 : 30} height={isMobile ? 34 : 30} 
               fill={hovered === 'duplicate' ? "#eff6ff" : "transparent"} 
               cornerRadius={8} 
             />
@@ -92,20 +92,20 @@ const SelectionControls = ({ object, onDelete, onDuplicate, stageRef }) => {
               data="M9 15H5a2 2 0 01-2-2V5a2 2 0 012-2h8a2 2 0 012 2v4M15 19H9a2 2 0 01-2-2v-8a2 2 0 012-2h8a2 2 0 012 2v8a2 2 0 01-2 2z"
               stroke={hovered === 'duplicate' ? "#2563eb" : "#475569"}
               strokeWidth={1.8}
-              x={6} y={6}
-              scaleX={0.7}
-              scaleY={0.7}
+              x={isMobile ? 8 : 6} y={isMobile ? 8 : 6}
+              scaleX={isMobile ? 0.9 : 0.7}
+              scaleY={isMobile ? 0.9 : 0.7}
             />
           </Group>
 
           {/* Divider */}
-          <Rect x={45} y={10} width={1} height={20} fill="#f1f5f9" />
+          <Rect x={isMobile ? 60 : 45} y={10} width={1} height={isMobile ? 30 : 20} fill="#f1f5f9" />
 
           {/* Delete Button */}
           <Group 
             onClick={onDelete} 
             onTap={onDelete} 
-            x={50} y={6} 
+            x={isMobile ? 68 : 50} y={isMobile ? 8 : 6} 
             cursor="pointer"
             onMouseEnter={() => setHovered('delete')}
             onMouseLeave={() => setHovered(null)}
@@ -116,7 +116,7 @@ const SelectionControls = ({ object, onDelete, onDuplicate, stageRef }) => {
           >
             {/* Hover Background */}
             <Rect 
-              width={30} height={30} 
+              width={isMobile ? 40 : 30} height={isMobile ? 34 : 30} 
               fill={hovered === 'delete' ? "#fef2f2" : "transparent"} 
               cornerRadius={8} 
             />
@@ -124,9 +124,9 @@ const SelectionControls = ({ object, onDelete, onDuplicate, stageRef }) => {
               data="M3 6h18M19 6v14a2 2 0 01-2 2H7a2 2 0 01-2-2V6m3 0V4a2 2 0 012-2h4a2 2 0 012 2v2"
               stroke={hovered === 'delete' ? "#dc2626" : "#475569"}
               strokeWidth={1.8}
-              x={6} y={6}
-              scaleX={0.7}
-              scaleY={0.7}
+              x={isMobile ? 8 : 6} y={isMobile ? 8 : 6}
+              scaleX={isMobile ? 0.9 : 0.7}
+              scaleY={isMobile ? 0.9 : 0.7}
             />
           </Group>
         </Group>
@@ -145,9 +145,59 @@ const CanvasArea = ({ stageRef }) => {
     deleteObject,
     duplicateObject,
   } = useStore();
+
   const transformerRef = useRef(null);
-  const CANVAS_WIDTH = 800;
-  const CANVAS_HEIGHT = 600;
+  const containerRef = useRef(null);
+  
+  const DESIGN_WIDTH = 800;
+  const DESIGN_HEIGHT = 600;
+
+  const [scale, setScale] = useState(1);
+  const [stageDimensions, setStageDimensions] = useState({
+    width: DESIGN_WIDTH,
+    height: DESIGN_HEIGHT
+  });
+
+  // Handle Resizing and Scaling
+  useEffect(() => {
+    const handleResize = () => {
+      if (!containerRef.current) return;
+      
+      const isMobile = window.innerWidth <= 768;
+      
+      // On mobile, we have:
+      // - Toolbar: 56px
+      // - BottomNav: 60px
+      // - Bottom Sheet (if open): approx 45vh
+      // We want the canvas to fit in the remaining space.
+      
+      const toolbarHeight = isMobile ? 56 : 80;
+      const bottomNavHeight = isMobile ? 60 : 0;
+      
+      const availableWidth = window.innerWidth - (isMobile ? 20 : 100);
+      const availableHeight = window.innerHeight - toolbarHeight - bottomNavHeight - (isMobile ? 100 : 100);
+
+      // Fit to container dimensions while maintaining aspect ratio
+      const scaleX = availableWidth / DESIGN_WIDTH;
+      const scaleY = availableHeight / DESIGN_HEIGHT;
+      const newScale = Math.min(scaleX, scaleY, 1.2); 
+      
+      setScale(newScale);
+      setStageDimensions({
+        width: DESIGN_WIDTH * newScale,
+        height: DESIGN_HEIGHT * newScale
+      });
+    };
+
+    handleResize();
+    const timer = setTimeout(handleResize, 100); // Small delay to ensure layout is settled
+    
+    window.addEventListener('resize', handleResize);
+    return () => {
+        window.removeEventListener('resize', handleResize);
+        clearTimeout(timer);
+    };
+  }, []);
 
   // Text Editing State
   const [editingId, setEditingId] = useState(null);
@@ -238,16 +288,20 @@ const CanvasArea = ({ stageRef }) => {
   }
 
   return (
-    <div className="canvas-wrapper">
-      <div className="canvas-container" style={{ position: "relative" }}>
-        <Stage
-          width={CANVAS_WIDTH}
-          height={CANVAS_HEIGHT}
-          onMouseDown={checkDeselect}
-          onTouchStart={checkDeselect}
-          ref={stageRef}
-          style={{ background: "white" }}
-        >
+    <div className="canvas-workspace-container" ref={containerRef} style={{ width: '100%', height: '100%', display: 'flex', alignItems: 'center', justifyContent: 'center', overflow: 'hidden' }}>
+      <div className="canvas-wrapper" style={{ boxShadow: '0 10px 40px -10px rgba(10, 93, 60, 0.2)', border: '1px solid var(--border-light)', borderRadius: '8px', background: 'white', overflow: 'hidden' }}>
+        <div className="canvas-container" style={{ position: "relative" }}>
+          <Stage
+            width={stageDimensions.width}
+            height={stageDimensions.height}
+            scaleX={scale}
+            scaleY={scale}
+            onMouseDown={checkDeselect}
+            onTouchStart={checkDeselect}
+            ref={stageRef}
+            style={{ background: "white" }}
+          >
+
           <Layer>
             {/* 1. Background Fills - These define the "clippable" area */}
             <Group name="background-fills">
@@ -436,6 +490,7 @@ const CanvasArea = ({ stageRef }) => {
         )}
       </div>
     </div>
+  </div>
   );
 };
 

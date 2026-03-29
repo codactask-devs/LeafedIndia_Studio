@@ -101,3 +101,38 @@
     font-size: 12px;
     text-align: center;
 }
+
+/* ============================================================
+   MOBILE RESPONSIVE — QuickAction
+   ============================================================ */
+@media (max-width: 768px) {
+    .quick-action-panel {
+        width: 90%;
+        max-width: 380px;
+        padding: 24px 20px;
+        border-radius: 28px;
+    }
+
+    .quick-action-templates {
+        display: grid;
+        grid-template-columns: repeat(2, 1fr);
+        gap: 12px;
+        padding: 10px;
+        max-height: 45vh;
+        overflow-y: auto;
+    }
+
+    .quick-action-item {
+        gap: 8px;
+        padding: 10px;
+    }
+
+    .quick-action-item svg {
+        width: 20px;
+        height: 20px;
+    }
+
+    .template-name {
+        font-size: 11px;
+    }
+}

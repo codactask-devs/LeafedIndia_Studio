@@ -144,6 +144,7 @@ const CanvasArea = ({ stageRef }) => {
     saveHistory,
     deleteObject,
     duplicateObject,
+    isSidebarOpen,
   } = useStore();
 
   const transformerRef = useRef(null);
@@ -157,6 +158,7 @@ const CanvasArea = ({ stageRef }) => {
     width: DESIGN_WIDTH,
     height: DESIGN_HEIGHT
   });
+  const [mobileOffset, setMobileOffset] = useState(0);
 
   // Handle Resizing and Scaling
   useEffect(() => {
@@ -173,9 +175,13 @@ const CanvasArea = ({ stageRef }) => {
       
       const toolbarHeight = isMobile ? 56 : 80;
       const bottomNavHeight = isMobile ? 60 : 0;
+      const mobileSidebarHeight = (isMobile && isSidebarOpen) ? (window.innerHeight * 0.45) : 0;
       
+      // Store the offset to use in render
+      setMobileOffset(mobileSidebarHeight);
+
       const availableWidth = window.innerWidth - (isMobile ? 20 : 100);
-      const availableHeight = window.innerHeight - toolbarHeight - bottomNavHeight - (isMobile ? 100 : 100);
+      const availableHeight = window.innerHeight - toolbarHeight - bottomNavHeight - mobileSidebarHeight - (isMobile ? 40 : 100);
 
       // Fit to container dimensions while maintaining aspect ratio
       const scaleX = availableWidth / DESIGN_WIDTH;
@@ -197,7 +203,7 @@ const CanvasArea = ({ stageRef }) => {
         window.removeEventListener('resize', handleResize);
         clearTimeout(timer);
     };
-  }, []);
+  }, [isSidebarOpen]); // Respond to sidebar state changes
 
   // Text Editing State
   const [editingId, setEditingId] = useState(null);
@@ -295,8 +301,21 @@ const CanvasArea = ({ stageRef }) => {
   }
 
   return (
-    <div className="canvas-workspace-container" ref={containerRef} style={{ width: '100%', height: '100%', display: 'flex', alignItems: 'center', justifyContent: 'center', overflow: 'hidden' }}>
-      <div className="canvas-wrapper" style={{ boxShadow: '0 10px 40px -10px rgba(10, 93, 60, 0.2)', border: '1px solid var(--border-light)', borderRadius: '8px', background: 'white', overflow: 'hidden' }}>
+    <div 
+      className="canvas-workspace-container" 
+      ref={containerRef} 
+      style={{ 
+        width: '100%', 
+        height: '100%', 
+        display: 'flex', 
+        alignItems: 'center', 
+        justifyContent: 'center', 
+        overflow: 'hidden',
+        paddingBottom: mobileOffset, // Shift the "center" upwards by the sidebar height
+        transition: 'padding-bottom 0.4s cubic-bezier(0.4, 0, 0.2, 1)' 
+      }}
+    >
+      <div className="canvas-wrapper" style={{ boxShadow: '0 10px 40px -10px rgba(10, 93, 60, 0.2)', border: '1px solid var(--border-light)', borderRadius: '8px', background: 'white', overflow: 'hidden', transition: 'all 0.4s cubic-bezier(0.4, 0, 0.2, 1)' }}>
         <div className="canvas-container" style={{ position: "relative" }}>
           <Stage
             width={stageDimensions.width}

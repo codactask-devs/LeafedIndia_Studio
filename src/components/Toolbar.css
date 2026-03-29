@@ -1,8 +1,8 @@
 .toolbar-container {
   height: 80px;
-  background: rgba(255, 255, 255, 0.8);
+  background: rgba(254, 251, 234, 0.85); /* Cream background with opacity */
   backdrop-filter: blur(12px);
-  border-bottom: 1px solid var(--border);
+  border-bottom: 1px solid var(--border-light);
   display: flex;
   align-items: center;
   justify-content: space-between;
@@ -24,7 +24,8 @@
   display: flex;
   align-items: center;
   gap: 12px;
-  background: #f1f5f9;
+  background: var(--surface);
+  border: 1px solid var(--border-light);
   padding: 6px;
   border-radius: var(--radius-sm);
 }
@@ -36,7 +37,7 @@
   display: flex;
   align-items: center;
   justify-content: center;
-  border-radius: 8px;
+  border-radius: var(--radius-sm);
   border: none;
   cursor: pointer;
   color: var(--text-muted);
@@ -44,7 +45,7 @@
 }
 
 .toolbar-icon-btn:hover:not(:disabled) {
-  background: white;
+  background: var(--color-10); /* Mint background on hover */
   color: var(--primary);
   box-shadow: var(--shadow-sm);
 }

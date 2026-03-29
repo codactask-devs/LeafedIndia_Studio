@@ -1,9 +1,5 @@
 .canvas-workspace {
   flex: 1;
-  background-color: #f1f5f9;
-  background-image: 
-    radial-gradient(#e2e8f0 1.5px, transparent 1.5px);
-  background-size: 24px 24px;
   display: flex;
   align-items: center;
   justify-content: center;

@@ -1,10 +1,10 @@
 .left-sidebar {
   width: 72px;
-  background-color: #0f172a; /* Slate 900 */
+  background-color: var(--color-11); /* Dark green */
   display: flex;
   flex-direction: column;
   padding: 12px 0;
-  border-right: 1px solid rgba(255, 255, 255, 0.1);
+  border-right: 1px solid rgba(255, 255, 255, 0.05);
   z-index: 100;
   flex-shrink: 0;
 }
@@ -18,7 +18,7 @@
   gap: 4px;
   background: transparent;
   border: none;
-  color: #94a3b8; /* Slate 400 */
+  color: rgba(255, 255, 255, 0.5);
   cursor: pointer;
   transition: all 0.2s ease;
   position: relative;
@@ -35,7 +35,7 @@
 }
 
 .left-sidebar-item:hover {
-  color: #f8fafc;
+  color: var(--color-4);
 }
 
 .left-sidebar-item:hover svg {
@@ -43,8 +43,8 @@
 }
 
 .left-sidebar-item.active {
-  color: #ffffff;
-  background-color: rgba(255, 255, 255, 0.1);
+  color: var(--color-15);
+  background-color: rgba(255, 255, 255, 0.05);
 }
 
 .left-sidebar-item.active::after {
@@ -54,7 +54,7 @@
   top: 15%;
   bottom: 15%;
   width: 3px;
-  background-color: #3b82f6; /* Blue 500 */
+  background-color: var(--color-5); /* Orange indicator */
   border-radius: 0 4px 4px 0;
 }
 

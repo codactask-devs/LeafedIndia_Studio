@@ -1,7 +1,7 @@
 .quick-action-overlay {
     position: absolute;
     inset: 0;
-    background: rgba(248, 250, 252, 0.85);
+    background: rgba(10, 93, 60, 0.4);
     backdrop-filter: blur(8px);
     z-index: 1000;
     display: flex;
@@ -12,13 +12,12 @@
 .quick-action-panel {
     width: 500px;
     padding: 32px;
-    font-family: 'Outfit', 'Montserrat', sans-serif;
+    font-family: inherit;
     animation: fadeInScale 0.4s cubic-bezier(0.16, 1, 0.3, 1);
-    /* remove the background and border of the panel itself */
-    background: white;
-    border: 1px solid #e2e8f0;
-    box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.05);
-    border-radius: 16px;
+    background: var(--color-4);
+    border: none;
+    box-shadow: 0 10px 25px rgba(10, 93, 60, 0.2);
+    border-radius: var(--radius);
 }
 
 @keyframes fadeInScale {
@@ -43,7 +42,7 @@
 .quick-action-header h3 {
     margin: 0;
     font-size: 24px;
-    color: #1e293b;
+    color: var(--text);
     font-weight: 700;
 }
 
@@ -61,14 +60,14 @@
 }
 
 .close-btn:hover {
-    background: rgba(0, 0, 0, 0.05);
-    color: #0f172a;
+    background: rgba(10, 93, 60, 0.1);
+    color: var(--color-8);
 }
 
 .quick-action-subtitle {
     margin: 0 0 24px 0;
     font-size: 16px;
-    color: #475569;
+    color: var(--text-muted);
 }
 
 .quick-action-templates {
@@ -97,26 +96,25 @@
     justify-content: center;
     gap: 12px;
     aspect-ratio: 1;
-    background: rgb(220, 217, 217);
-    border: 1px solid #030303;
+    background: transparent;
+    border: 1px solid var(--border-light);
     border-radius: 16px;
     cursor: pointer;
     transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1);
-    color: #475569;
-    box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.05);
+    color: var(--text-muted);
+    box-shadow: 0 4px 6px -1px rgba(10, 93, 60, 0.05);
 }
 
 .quick-action-item svg {
-    color: #8b5cf6;
+    color: var(--primary);
     transition: transform 0.2s ease;
 }
 
 .quick-action-item:hover {
-    border-color: #8b5cf6;
-    background: white;
-    color: #8b5cf6;
+    background: var(--color-10);
+    border-color: var(--color-5);
     transform: translateY(-4px);
-    box-shadow: 0 10px 15px -3px rgba(139, 92, 246, 0.15);
+    box-shadow: 0 10px 15px -3px rgba(251, 146, 60, 0.15);
 }
 
 .quick-action-item:hover svg {

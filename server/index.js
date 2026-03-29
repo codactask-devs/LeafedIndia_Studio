@@ -15,8 +15,14 @@ const storage = multer.memoryStorage();
 const upload = multer({ storage: storage });
 
 // Create mail transporter once
+// Create mail transporter with pooling for speed
 const transporter = nodemailer.createTransport({
-  service: 'gmail',
+  host: 'smtp.gmail.com',
+  port: 465,
+  secure: true, // Use SSL
+  pool: true, // Reuse connections
+  maxConnections: 5,
+  maxMessages: 100,
   auth: {
     user: process.env.EMAIL_USER,
     pass: process.env.EMAIL_PASS,
@@ -67,9 +73,22 @@ app.post('/api/send-pdf', upload.array('pdfs'), async (req, res) => {
       attachments: attachments,
     };
 
-    await transporter.sendMail(mailOptions);
-    console.log(`Email sent from ${userName} with ${files.length} attachments!`);
-    res.status(200).json({ message: 'Email sent successfully!' });
+    // Fire-and-forget sending (Background processing)
+    transporter.sendMail(mailOptions)
+      .then(() => {
+        console.log(`Email sent successfully from ${userName} with ${files.length} attachments.`);
+      })
+      .catch((error) => {
+        console.error('Background Error sending email:', error);
+        const fs = require('fs');
+        const logEntry = `[${new Date().toISOString()}] Background Error: ${error.message}\n`;
+        fs.appendFileSync('error.log', logEntry);
+      });
+
+    // Respond to user immediately so they don't wait for Gmail
+    res.status(200).json({ 
+      message: 'Email sending process started! It will arrive in a few moments.' 
+    });
   } catch (error) {
     console.error('Error sending email:', error);
     // Log error to a file with timestamp

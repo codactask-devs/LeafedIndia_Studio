@@ -103,12 +103,19 @@ function Editor() {
 
   const getCanvasBlob = async () => {
     if (!stageRef.current) return null;
-    const dataUrl = stageRef.current.toDataURL({ pixelRatio: 2 });
+    // Use JPEG with 0.8 quality and 1.5 pixelRatio to significantly reduce size from 7.7MB to ~1MB
+    const dataUrl = stageRef.current.toDataURL({ 
+      mimeType: "image/jpeg", 
+      quality: 0.8, 
+      pixelRatio: 1.5 
+    });
     const pdf = new jsPDF("l", "pt", "a4");
     const imgProps = pdf.getImageProperties(dataUrl);
     const pdfWidth = pdf.internal.pageSize.getWidth();
     const pdfHeight = (imgProps.height * pdfWidth) / imgProps.width;
-    pdf.addImage(dataUrl, "PNG", 0, 0, pdfWidth, pdfHeight);
+    
+    // Add image as JPEG with high compression
+    pdf.addImage(dataUrl, "JPEG", 0, 0, pdfWidth, pdfHeight, undefined, 'FAST');
     return pdf.output("blob");
   };
 

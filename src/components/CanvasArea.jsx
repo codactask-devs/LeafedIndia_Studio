@@ -234,6 +234,13 @@ const CanvasArea = ({ stageRef }) => {
         transformerRef.current.nodes([]);
     }
   }, [selectedId, objects, editingId, stageRef]);
+  
+  // Safety: If the object being edited is removed from store (e.g. template switch), reset editing state
+  useEffect(() => {
+    if (editingId && !objects.find(o => o.id === editingId)) {
+        setEditingId(null);
+    }
+  }, [objects, editingId]);
 
   const checkDeselect = (e) => {
     const clickedOnEmpty = e.target === e.target.getStage();

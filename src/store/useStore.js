@@ -69,9 +69,8 @@ const useStore = create((set, get) => ({
         rotation: 0,
       }));
 
-      const { objects, saveHistory } = get();
-      const filteredObjects = objects.filter(o => o.type !== "svg-container" && o.type !== "svg-path");
-      const newObjects = [...filteredObjects, ...pathObjects];
+      const { saveHistory } = get();
+      const newObjects = [...pathObjects];
       set({ objects: newObjects, selectedId: null, hasChanges: false });
       saveHistory();
     } catch (error) {

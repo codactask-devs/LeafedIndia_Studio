@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useState } from 'react';
 import './ColorPickerGrid.css';
 
 const DEFAULT_COLORS = [
@@ -23,6 +23,7 @@ const DEFAULT_COLORS = [
 ];
 
 const ColorPickerGrid = ({ color, onChange }) => {
+    const [showNative, setShowNative] = useState(false);
     // Normalize color value to avoid mismatch (e.g., #FFFFFF vs #ffffff)
     const normalizedColor = color ? color.toLowerCase() : "";
 
@@ -56,6 +57,32 @@ const ColorPickerGrid = ({ color, onChange }) => {
                     );
                 })}
             </div>
+            
+            <button 
+                className="more-colors-btn" 
+                onClick={() => setShowNative(!showNative)}
+            >
+                {showNative ? "Less Colors" : "More Colors..."}
+            </button>
+
+            {showNative && (
+                <div className="sidebar-color-row-premium" style={{ marginTop: '12px' }}>
+                    <div className="sidebar-color-picker-wrapper-lux">
+                        <input
+                            type="color"
+                            value={normalizedColor || "#000000"}
+                            onChange={(e) => onChange(e.target.value)}
+                        />
+                    </div>
+                    <input
+                        type="text"
+                        className="sidebar-text-input-premium"
+                        value={normalizedColor || "#000000"}
+                        onChange={(e) => onChange(e.target.value)}
+                        maxLength={7}
+                    />
+                </div>
+            )}
         </div>
     );
 };

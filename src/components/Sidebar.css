@@ -718,6 +718,15 @@
   font-style: italic;
 }
 
+.no-uploaded-images {
+  grid-column: span 2;
+  padding: 40px 20px;
+  text-align: center;
+  color: #94a3b8;
+  font-size: 13px;
+  font-style: italic;
+}
+
 /* Luxury Color Picker */
 .sidebar-color-row-premium {
   display: flex;

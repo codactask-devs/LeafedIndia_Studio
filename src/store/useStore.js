@@ -14,6 +14,7 @@ const useStore = create((set, get) => ({
   hasChanges: false,
   pendingTemplate: null,
   showConfirmModal: false,
+  uploadedImages: [],
 
   setTemplate: (template) => set({ currentTemplate: template }),
   setActiveTab: (tab) => set({ activeTab: tab, isSidebarOpen: true }),
@@ -201,6 +202,15 @@ const useStore = create((set, get) => ({
     set({ objects: newObjects, hasChanges: true });
     saveHistory();
   },
+
+  // Uploaded images management
+  setUploadedImages: (images) => set({ uploadedImages: images }),
+  addUploadedImage: (image) => set((state) => ({
+    uploadedImages: [image, ...state.uploadedImages]
+  })),
+  removeUploadedImage: (id) => set((state) => ({
+    uploadedImages: state.uploadedImages.filter(img => img.id !== id)
+  })),
 }));
 
 export default useStore;

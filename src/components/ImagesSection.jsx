@@ -9,6 +9,7 @@ const preUploadedFiles = import.meta.glob("../assets/pre-uploaded/*.{png,jpg,jpe
 const ImagesSection = () => {
     const { addObject, uploadedImages, setUploadedImages, removeUploadedImage } = useStore();
     const fileInputRef = useRef(null);
+    const [activeTab, setActiveTab] = useState("preuploaded"); // "preuploaded" or "myimages"
 
     // Map discovered files to a usable list
     const preUploadedImages = Object.entries(preUploadedFiles).map(([path, module]) => {
@@ -62,6 +63,9 @@ const ImagesSection = () => {
                         x: 100,
                         y: 100,
                     });
+
+                    // Switch to My Images tab after upload
+                    setActiveTab("myimages");
                 };
                 img.src = event.target.result;
             };
@@ -98,98 +102,192 @@ const ImagesSection = () => {
                 </button>
             </div>
 
-            <div className="sidebar-tool-section" style={{ minHeight: 'auto', marginBottom: '32px' }}>
-                <h3 className="section-label-premium">Pre-uploaded Images</h3>
-                
-                <div className="sidebar-image-grid">
-                    {preUploadedImages.map((image) => (
-                        <div
-                            key={image.id}
-                            className="sidebar-image-item premium-shadow"
-                            title={image.name}
-                        >
-                            <img
-                                src={image.src}
-                                className="sidebar-draggable-image"
-                                draggable
-                                onDragStart={(e) => {
-                                    e.dataTransfer.setData("type", "image");
-                                    e.dataTransfer.setData("payload", JSON.stringify({ src: image.src }));
-                                }}
-                                onError={handleImageError}
-                                alt={image.name}
-                                onClick={() => addObject({ type: "image", src: image.src, x: 100, y: 100, width: 250, height: 250 })}
-                            />
-                        </div>
-                    ))}
+            {/* Tab Navigation */}
+            <div className="image-tabs-container" style={{ marginTop: '24px', marginBottom: '16px' }}>
+                <div style={{ 
+                    display: 'flex', 
+                    gap: '8px',
+                    borderBottom: '1px solid #e2e8f0',
+                    paddingBottom: '0'
+                }}>
+                    <button
+                        onClick={() => setActiveTab("preuploaded")}
+                        style={{
+                            flex: 1,
+                            padding: '10px 16px',
+                            background: 'none',
+                            border: 'none',
+                            fontSize: '14px',
+                            fontWeight: activeTab === "preuploaded" ? '600' : '500',
+                            color: activeTab === "preuploaded" ? '#5ddf4bff' : '#64748b',
+                            cursor: 'pointer',
+                            borderBottom: activeTab === "preuploaded" ? '2px solid #5ddf4bff' : '2px solid transparent',
+                            transition: 'all 0.2s ease',
+                            backgroundColor: activeTab === "preuploaded" ? '#eff6ff' : 'transparent',
+                            borderRadius: '8px 8px 0 0'
+                        }}
+                    >
+                        Pre-uploaded Images
+                        {/* <span style={{ 
+                            marginLeft: '8px', 
+                            fontSize: '11px', 
+                            backgroundColor: activeTab === "preuploaded" ? '#dbeafe' : '#e2e8f0',
+                            padding: '2px 6px',
+                            borderRadius: '12px',
+                            color: activeTab === "preuploaded" ? '#5ddf4bff' : '#475569'
+                        }}>
+                            {preUploadedImages.length}
+                        </span> */}
+                    </button>
+                    <button
+                        onClick={() => setActiveTab("myimages")}
+                        style={{
+                            flex: 1,
+                            padding: '10px 16px',
+                            background: 'none',
+                            border: 'none',
+                            fontSize: '14px',
+                            fontWeight: activeTab === "myimages" ? '600' : '500',
+                            color: activeTab === "myimages" ? '#5ddf4bff' : '#64748b',
+                            cursor: 'pointer',
+                            borderBottom: activeTab === "myimages" ? '2px solid #5ddf4bff' : '2px solid transparent',
+                            transition: 'all 0.2s ease',
+                            backgroundColor: activeTab === "myimages" ? '#eff6ff' : 'transparent',
+                            borderRadius: '8px 8px 0 0'
+                        }}
+                    >
+                        My Images
+                        {/* <span style={{ 
+                            marginLeft: '8px', 
+                            fontSize: '11px', 
+                            backgroundColor: activeTab === "myimages" ? '#dbeafe' : '#e2e8f0',
+                            padding: '2px 6px',
+                            borderRadius: '12px',
+                            color: activeTab === "myimages" ? '#5ddf4bff' : '#475569'
+                        }}>
+                            {uploadedImages.length}
+                        </span> */}
+                    </button>
                 </div>
-                
-                {preUploadedImages.length === 0 && (
-                    <div className="no-uploaded-images">
-                        <p>No pre-uploaded images found.</p>
-                    </div>
-                )}
             </div>
 
-            <div className="sidebar-tool-section" style={{ minHeight: '300px' }}>
-                <div className="section-header-flex">
-                    <h3 className="section-label-premium" style={{ marginBottom: 0 }}>My Images</h3>
-                    <span style={{ fontSize: '10px', color: '#94a3b8', fontWeight: '600' }}>
-                        {uploadedImages.length} {uploadedImages.length === 1 ? 'image' : 'images'}
-                    </span>
-                </div>
-
-                <div className="sidebar-image-grid">
-                    {uploadedImages.map((image) => (
-                        <div
-                            key={image.id}
-                            className="sidebar-image-item premium-shadow"
-                            style={{ position: 'relative' }}
-                        >
-                            <button
-                                className="header-action-btn delete-btn"
-                                style={{
-                                    position: 'absolute',
-                                    top: '4px',
-                                    right: '4px',
-                                    zIndex: 10,
-                                    width: '24px',
-                                    height: '24px',
-                                    padding: '0',
-                                    minWidth: 'auto'
-                                }}
-                                onClick={(e) => {
-                                    e.stopPropagation();
-                                    handleRemoveImage(image.id);
-                                }}
+            {/* Pre-uploaded Images Tab Content */}
+            {activeTab === "preuploaded" && (
+                <div className="sidebar-tool-section" style={{ minHeight: 'auto' }}>
+                    <div className="sidebar-image-grid">
+                        {preUploadedImages.map((image) => (
+                            <div
+                                key={image.id}
+                                className="sidebar-image-item premium-shadow"
+                                title={image.name}
                             >
-                                ×
-                            </button>
-                            <img
-                                src={image.src}
-                                className="sidebar-draggable-image"
-                                draggable
-                                onDragStart={(e) => {
-                                    e.dataTransfer.setData("type", "image");
-                                    e.dataTransfer.setData("payload", JSON.stringify({ src: image.src }));
-                                }}
-                                onError={handleImageError}
-                                alt={image.name}
-                                onClick={() => addObject({ type: "image", src: image.src, x: 100, y: 100, width: 250, height: 250 })}
-                            />
-                        </div>
-                    ))}
-                </div>
-
-                {uploadedImages.length === 0 && (
-                    <div className="no-uploaded-images">
-                        <p>No images uploaded yet. Upload your first image!</p>
+                                <img
+                                    src={image.src}
+                                    className="sidebar-draggable-image"
+                                    draggable
+                                    onDragStart={(e) => {
+                                        e.dataTransfer.setData("type", "image");
+                                        e.dataTransfer.setData("payload", JSON.stringify({ src: image.src }));
+                                    }}
+                                    onError={handleImageError}
+                                    alt={image.name}
+                                    onClick={() => addObject({ type: "image", src: image.src, x: 100, y: 100, width: 250, height: 250 })}
+                                />
+                                <div style={{ 
+                                    fontSize: '11px', 
+                                    textAlign: 'center', 
+                                    padding: '4px',
+                                    color: '#64748b',
+                                    overflow: 'hidden',
+                                    textOverflow: 'ellipsis',
+                                    whiteSpace: 'nowrap'
+                                }}>
+                                    {image.name}
+                                </div>
+                            </div>
+                        ))}
                     </div>
-                )}
-            </div>
+                    
+                    {preUploadedImages.length === 0 && (
+                        <div className="no-uploaded-images">
+                            <p>No pre-uploaded images found.</p>
+                        </div>
+                    )}
+                </div>
+            )}
+
+            {/* My Images Tab Content */}
+            {activeTab === "myimages" && (
+                <div className="sidebar-tool-section" style={{ minHeight: '300px' }}>
+                    <div className="sidebar-image-grid">
+                        {uploadedImages.map((image) => (
+                            <div
+                                key={image.id}
+                                className="sidebar-image-item premium-shadow"
+                                style={{ position: 'relative' }}
+                            >
+                                <button
+                                    className="header-action-btn delete-btn"
+                                    style={{
+                                        position: 'absolute',
+                                        top: '4px',
+                                        right: '4px',
+                                        zIndex: 10,
+                                        width: '24px',
+                                        height: '24px',
+                                        padding: '0',
+                                        minWidth: 'auto',
+                                        borderRadius: '4px',
+                                        backgroundColor: 'rgba(239, 68, 68, 0.9)',
+                                        color: 'white',
+                                        border: 'none',
+                                        cursor: 'pointer',
+                                        fontSize: '16px',
+                                        fontWeight: 'bold'
+                                    }}
+                                    onClick={(e) => {
+                                        e.stopPropagation();
+                                        handleRemoveImage(image.id);
+                                    }}
+                                >
+                                    ×
+                                </button>
+                                <img
+                                    src={image.src}
+                                    className="sidebar-draggable-image"
+                                    draggable
+                                    onDragStart={(e) => {
+                                        e.dataTransfer.setData("type", "image");
+                                        e.dataTransfer.setData("payload", JSON.stringify({ src: image.src }));
+                                    }}
+                                    onError={handleImageError}
+                                    alt={image.name}
+                                    onClick={() => addObject({ type: "image", src: image.src, x: 100, y: 100, width: 250, height: 250 })}
+                                />
+                                <div style={{ 
+                                    fontSize: '11px', 
+                                    textAlign: 'center', 
+                                    padding: '4px',
+                                    color: '#64748b',
+                                    overflow: 'hidden',
+                                    textOverflow: 'ellipsis',
+                                    whiteSpace: 'nowrap'
+                                }}>
+                                    {image.name.length > 20 ? image.name.substring(0, 17) + '...' : image.name}
+                                </div>
+                            </div>
+                        ))}
+                    </div>
+
+                    {uploadedImages.length === 0 && (
+                        <div className="no-uploaded-images">
+                            <p>No images uploaded yet. Upload your first image!</p>
+                        </div>
+                    )}
+                </div>
+            )}
         </div>
     );
 };
 
 export default ImagesSection;
-

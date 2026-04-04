@@ -1,11 +1,25 @@
 import React, { useRef, useState, useEffect } from "react";
-import { Upload } from "lucide-react";
+import { Upload, Image as ImageIcon } from "lucide-react";
 import useStore from "../store/useStore";
 import "./Sidebar.css";
+
+// Dynamic discovery of pre-uploaded images
+const preUploadedFiles = import.meta.glob("../assets/pre-uploaded/*.{png,jpg,jpeg,svg,webp}", { eager: true });
 
 const ImagesSection = () => {
     const { addObject, uploadedImages, setUploadedImages, removeUploadedImage } = useStore();
     const fileInputRef = useRef(null);
+
+    // Map discovered files to a usable list
+    const preUploadedImages = Object.entries(preUploadedFiles).map(([path, module]) => {
+        const fileName = path.split('/').pop();
+        const name = fileName.split('.')[0].replace(/[-_]/g, ' ');
+        return {
+            id: `pre-${fileName}`,
+            src: module.default,
+            name: name.charAt(0).toUpperCase() + name.slice(1)
+        };
+    });
 
     useEffect(() => {
         // Load images from localStorage on component mount
@@ -84,8 +98,46 @@ const ImagesSection = () => {
                 </button>
             </div>
 
+            <div className="sidebar-tool-section" style={{ minHeight: 'auto', marginBottom: '32px' }}>
+                <h3 className="section-label-premium">Pre-uploaded Images</h3>
+                
+                <div className="sidebar-image-grid">
+                    {preUploadedImages.map((image) => (
+                        <div
+                            key={image.id}
+                            className="sidebar-image-item premium-shadow"
+                            title={image.name}
+                        >
+                            <img
+                                src={image.src}
+                                className="sidebar-draggable-image"
+                                draggable
+                                onDragStart={(e) => {
+                                    e.dataTransfer.setData("type", "image");
+                                    e.dataTransfer.setData("payload", JSON.stringify({ src: image.src }));
+                                }}
+                                onError={handleImageError}
+                                alt={image.name}
+                                onClick={() => addObject({ type: "image", src: image.src, x: 100, y: 100, width: 250, height: 250 })}
+                            />
+                        </div>
+                    ))}
+                </div>
+                
+                {preUploadedImages.length === 0 && (
+                    <div className="no-uploaded-images">
+                        <p>No pre-uploaded images found.</p>
+                    </div>
+                )}
+            </div>
+
             <div className="sidebar-tool-section" style={{ minHeight: '300px' }}>
-                <h3 className="section-label-premium">My Images</h3>
+                <div className="section-header-flex">
+                    <h3 className="section-label-premium" style={{ marginBottom: 0 }}>My Images</h3>
+                    <span style={{ fontSize: '10px', color: '#94a3b8', fontWeight: '600' }}>
+                        {uploadedImages.length} {uploadedImages.length === 1 ? 'image' : 'images'}
+                    </span>
+                </div>
 
                 <div className="sidebar-image-grid">
                     {uploadedImages.map((image) => (
@@ -140,3 +192,4 @@ const ImagesSection = () => {
 };
 
 export default ImagesSection;
+

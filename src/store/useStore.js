@@ -1,7 +1,7 @@
 import { create } from "zustand";
 import { v4 as uuidv4 } from "uuid";
 import { parseSvgContent } from "../utils/svgParser";
-import doodleBg from "../assets/food-packaging-bg.jpeg";
+import doodleBg from "../assets/food-packaging.jpeg";
 
 const useStore = create((set, get) => ({
   objects: [],

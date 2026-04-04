@@ -1,6 +1,7 @@
 import { create } from "zustand";
 import { v4 as uuidv4 } from "uuid";
 import { parseSvgContent } from "../utils/svgParser";
+import doodleBg from "../assets/food-packaging-bg.jpeg";
 
 const useStore = create((set, get) => ({
   objects: [],
@@ -15,7 +16,9 @@ const useStore = create((set, get) => ({
   pendingTemplate: null,
   showConfirmModal: false,
   uploadedImages: [],
+  canvasBackground: doodleBg, // Default background
 
+  setCanvasBackground: (bg) => set({ canvasBackground: bg }),
   setTemplate: (template) => set({ currentTemplate: template }),
   setActiveTab: (tab) => set({ activeTab: tab, isSidebarOpen: true }),
   toggleSidebar: () => set((state) => ({ isSidebarOpen: !state.isSidebarOpen })),

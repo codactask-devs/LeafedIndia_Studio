@@ -26,7 +26,8 @@ function Editor() {
     resetCanvas,
     loadSvgTemplate: storeLoadSvgTemplate,
     selectedId,
-    selectObject
+    selectObject,
+    canvasBackground,
   } = useStore();
 
   const stageRef = useRef(null);
@@ -252,6 +253,9 @@ function Editor() {
           className="canvas-workspace"
           onDrop={handleDrop}
           onDragOver={handleDragOver}
+          style={{ 
+            '--canvas-bg': `url("${canvasBackground}")`
+          }}
         >
           <CanvasArea stageRef={stageRef} />
           <QuickAction />

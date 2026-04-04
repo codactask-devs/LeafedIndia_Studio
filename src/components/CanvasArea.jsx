@@ -145,6 +145,7 @@ const CanvasArea = ({ stageRef }) => {
     deleteObject,
     duplicateObject,
     isSidebarOpen,
+    canvasBackground,
   } = useStore();
 
   const transformerRef = useRef(null);
@@ -329,6 +330,15 @@ const CanvasArea = ({ stageRef }) => {
           >
 
           <Layer>
+            {/* Background Image */}
+            {/* <URLImage 
+              src={canvasBackground} 
+              width={DESIGN_WIDTH} 
+              height={DESIGN_HEIGHT} 
+              opacity={1}
+              listening={false} // So it doesn't interfere with interaction
+            /> */}
+            
             {/* 1. Background Fills - These define the "clippable" area */}
             <Group name="background-fills">
               {objects

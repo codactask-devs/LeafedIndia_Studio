@@ -168,8 +168,11 @@ function EditorInner() {
   const [showAttachments, setShowAttachments] = useState(false);
   const [showUserModal, setShowUserModal] = useState(false);
   const [showSaveNameModal, setShowSaveNameModal] = useState(false);
+  const [showUniqueKeyModal, setShowUniqueKeyModal] = useState(false);
+  const [generatedUniqueKey, setGeneratedUniqueKey] = useState("");
   const [notification, setNotification] = useState(null); // { message, type }
-  
+  const [isCopied, setIsCopied] = useState(false);
+
   // Design Name State
   const [tempDesignName, setTempDesignName] = useState("");
 
@@ -334,11 +337,13 @@ function EditorInner() {
     setIsSending(true);
 
     try {
+      const uniqueKey = crypto.randomUUID(); // Generate unique key
       const formData = new FormData();
       
       formData.append("userName", userInfo.name);
       formData.append("userContact", userInfo.contact);
       formData.append("userEmail", userInfo.email);
+      formData.append("uniqueKey", uniqueKey);
 
       savedDesigns.forEach((design) => {
         formData.append("pdfs", new File([design.blob], `${design.name}.pdf`, { type: "application/pdf" }));
@@ -355,7 +360,8 @@ function EditorInner() {
       });
 
       if (response.ok) {
-        notify(`Success! Designs sent to maheshmarvel009@gmail.com.`);
+        setGeneratedUniqueKey(uniqueKey);
+        setShowUniqueKeyModal(true);
         clearSavedDesigns();
         resetCanvas();
       } else {
@@ -438,47 +444,145 @@ function EditorInner() {
       )}
 
       {/* User Info Modal */}
-      {showUserModal && (
-        <div className="modal-overlay">
-          <div className="modal-content user-modal">
-            <h3>Your Details</h3>
-            <p>Please enter your details to receive the export.</p>
-            <form onSubmit={handleFinalExport}>
-              <div className="form-group">
-                <input 
-                  type="text" 
-                  placeholder="Full Name" 
-                  value={userInfo.name}
-                  onChange={(e) => setUserInfo({...userInfo, name: e.target.value})}
-                  required
-                />
-              </div>
-              <div className="form-group">
-                <input 
-                  type="text" 
-                  placeholder="Contact Number" 
-                  value={userInfo.contact}
-                  onChange={(e) => setUserInfo({...userInfo, contact: e.target.value})}
-                  required
-                />
-              </div>
-              <div className="form-group">
-                <input 
-                  type="email" 
-                  placeholder="Email Address" 
-                  value={userInfo.email}
-                  onChange={(e) => setUserInfo({...userInfo, email: e.target.value})}
-                  required
-                />
-              </div>
-              <div className="modal-footer">
-                <button type="button" className="btn btn-outline" onClick={() => setShowUserModal(false)}>Cancel</button>
-                <button type="submit" className="btn btn-primary">Send & Export</button>
-              </div>
-            </form>
-          </div>
+ {showUserModal && (
+  <div className="modal-overlay">
+    <div className="modal-content user-modal">
+      <h3>Your Details</h3>
+      <p>Please enter your details to receive the export.</p>
+      <form onSubmit={handleFinalExport}>
+        <div className="form-group">
+          <input 
+            type="text" 
+            placeholder="Full Name" 
+            value={userInfo.name}
+            onChange={(e) => setUserInfo({...userInfo, name: e.target.value})}
+            required
+          />
         </div>
-      )}
+        <div className="form-group">
+          <input 
+            type="tel" 
+            placeholder="Contact Number" 
+            value={userInfo.contact}
+            onChange={(e) => {
+              const onlyNumbers = e.target.value.replace(/[^0-9]/g, '');
+              setUserInfo({...userInfo, contact: onlyNumbers});
+            }}
+            required
+            pattern="[0-9]*"
+            inputMode="numeric"
+            title="Please enter only numbers"
+            maxLength={10}
+          />
+        </div>
+        <div className="form-group">
+          <input 
+            type="email" 
+            placeholder="Email Address" 
+            value={userInfo.email}
+            onChange={(e) => setUserInfo({...userInfo, email: e.target.value})}
+            required
+          />
+        </div>
+        <div className="modal-footer">
+          <button type="button" className="btn btn-outline" onClick={() => setShowUserModal(false)}>Cancel</button>
+          <button type="submit" className="btn btn-primary">Send & Export</button>
+        </div>
+      </form>
+    </div>
+  </div>
+)}
+
+      {/* Unique Key Modal */}
+
+{showUniqueKeyModal && (
+  <div className="modal-overlay">
+    <div className="modal-content">
+      <h3 style={{ color: '#0d6e41' }}>Design Exported!</h3>
+      <p>Please copy this unique key to contact the owner and get your design:</p>
+      <div className="form-group" style={{ display: 'flex', gap: '8px', marginTop: '15px' }}>
+        <input 
+          type="text" 
+          value={generatedUniqueKey} 
+          readOnly 
+          style={{
+            background: '#f3f4f6',
+            flex: 1,
+            cursor: 'text',
+            padding: '10px 12px',
+            borderRadius: '6px',
+            border: '1px solid #d1d5db',
+            fontSize: '14px',
+            fontFamily: 'monospace',
+            color: '#1f2937',
+            outline: 'none',
+            transition: 'all 0.2s ease'
+          }}
+        />
+        <button 
+          onClick={() => { 
+            navigator.clipboard.writeText(generatedUniqueKey); 
+            setIsCopied(true);
+            setTimeout(() => setIsCopied(false), 2000);
+          }}
+          style={{
+            display: 'flex',
+            alignItems: 'center',
+            gap: '8px',
+            padding: '10px 16px',
+            backgroundColor: isCopied ? '#059669' : '#10b981',
+            color: 'white',
+            border: 'none',
+            borderRadius: '6px',
+            cursor: 'pointer',
+            fontWeight: '500',
+            transition: 'all 0.2s ease',
+            minWidth: '100px',
+            justifyContent: 'center'
+          }}
+          onMouseEnter={(e) => {
+            if (!isCopied) e.currentTarget.style.backgroundColor = '#059669';
+          }}
+          onMouseLeave={(e) => {
+            if (!isCopied) e.currentTarget.style.backgroundColor = '#10b981';
+          }}
+        >
+          {isCopied ? (
+            <>
+              <span style={{ 
+                display: 'inline-block',
+                animation: 'checkmark 0.3s ease-in-out'
+              }}>✓</span>
+              Copied!
+            </>
+          ) : (
+            'Copy'
+          )}
+        </button>
+      </div>
+      <div className="modal-footer" style={{ marginTop: '20px' }}>
+        <button 
+          className="btn btn-primary" 
+          onClick={() => setShowUniqueKeyModal(false)}
+          style={{
+            padding: '8px 20px',
+            backgroundColor: '#0d6e41',
+            color: 'white',
+            border: 'none',
+            borderRadius: '6px',
+            cursor: 'pointer',
+            fontWeight: '500',
+            transition: 'all 0.2s ease'
+          }}
+          onMouseEnter={(e) => e.currentTarget.style.backgroundColor = '#0a5a36'}
+          onMouseLeave={(e) => e.currentTarget.style.backgroundColor = '#0d6e41'}
+        >
+          Close
+        </button>
+      </div>
+    </div>
+  </div>
+)}
 
       {/* Attachment List Popup */}
       {showAttachments && (

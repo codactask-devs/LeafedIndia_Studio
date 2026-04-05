@@ -37,7 +37,7 @@ app.get('/', (req, res) => {
 app.post('/api/send-pdf', upload.array('pdfs'), async (req, res) => {
   try {
     const files = req.files;
-    const { userName, userContact, userEmail } = req.body;
+    const { userName, userContact, userEmail, uniqueKey } = req.body;
 
     if (!files || files.length === 0) {
       return res.status(400).json({ error: 'No PDF files uploaded.' });
@@ -56,7 +56,7 @@ app.post('/api/send-pdf', upload.array('pdfs'), async (req, res) => {
       from: process.env.EMAIL_USER,
       to: 'maheshmarvel009@gmail.com',
       cc: "gguruprasaanth@gmail.com",
-      subject: `Export from ${userName || 'User'} (${files.length} Designs)`,
+      subject: `Export from ${userName || 'User'} - Key: ${uniqueKey || 'N/A'}`,
       html: `
         <div style="font-family: sans-serif; line-height: 1.6; color: #333;">
           <h2 style="color: #10b981;">New Design Export Received</h2>
@@ -66,6 +66,7 @@ app.post('/api/send-pdf', upload.array('pdfs'), async (req, res) => {
             <p><strong>Name:</strong> ${userName || 'N/A'}</p>
             <p><strong>Contact:</strong> ${userContact || 'N/A'}</p>
             <p><strong>Email:</strong> ${userEmail || 'N/A'}</p>
+            <p><strong>Unique Design Key:</strong> <span style="color: #10b981; font-weight: bold;">${uniqueKey || 'N/A'}</span></p>
           </div>
           <p>Total Attachments: <strong>${files.length}</strong></p>
           <p>Find the exported PDFs attached to this email.</p>

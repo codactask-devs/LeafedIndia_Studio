@@ -18,12 +18,12 @@
 .canvas-workspace {
   flex: 1;
   /* Light cream base — keeps templates visually prominent */
-  background-color: #fdf9f0;
+  background-color: #fdf3f0;
   /* Layer 1: square grid   Layer 2: doodle tile */
   background-image:
     /* Square grid — soft sage-green lines */
-    linear-gradient(rgba(13,110,65,0.10) 1px, transparent 1px),
-    linear-gradient(90deg, rgba(13,110,65,0.10) 1px, transparent 1px),
+    linear-gradient(rgba(13, 110, 65, 0.10) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(13, 110, 65, 0.10) 1px, transparent 1px),
     /* Doodle tile: pencils, erasers, food boxes */
     var(--canvas-bg);
   background-size: 30px 30px, 30px 30px, 320px 320px;

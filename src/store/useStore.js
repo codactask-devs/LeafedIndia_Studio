@@ -1,7 +1,7 @@
 import { create } from "zustand";
 import { v4 as uuidv4 } from "uuid";
 import { parseSvgContent } from "../utils/svgParser";
-import doodleBg from "../assets/food-packaging.jpeg";
+import doodleBg from "../assets/food-packaging_V3.jpg";
 
 const useStore = create((set, get) => ({
   objects: [],
@@ -24,19 +24,19 @@ const useStore = create((set, get) => ({
   toggleSidebar: () => set((state) => ({ isSidebarOpen: !state.isSidebarOpen })),
   setSidebarOpen: (isOpen) => set({ isSidebarOpen: isOpen }),
   setHasChanges: (val) => set({ hasChanges: val }),
-  addSavedDesign: (design) => set((state) => ({ 
+  addSavedDesign: (design) => set((state) => ({
     savedDesigns: [...state.savedDesigns, { ...design, id: uuidv4() }],
-    hasChanges: false 
+    hasChanges: false
   })),
-  removeSavedDesign: (id) => set((state) => ({ 
-    savedDesigns: state.savedDesigns.filter(d => d.id !== id) 
+  removeSavedDesign: (id) => set((state) => ({
+    savedDesigns: state.savedDesigns.filter(d => d.id !== id)
   })),
   clearSavedDesigns: () => set({ savedDesigns: [] }),
-  resetCanvas: () => set({ 
-    objects: [], 
-    history: [[]], 
-    historyStep: 0, 
-    hasChanges: false, 
+  resetCanvas: () => set({
+    objects: [],
+    history: [[]],
+    historyStep: 0,
+    hasChanges: false,
     selectedId: null,
     pendingTemplate: null,
     showConfirmModal: false
@@ -52,7 +52,7 @@ const useStore = create((set, get) => ({
       const { paths, width, height } = parseSvgContent(svgText);
       const CANVAS_W = 800;
       const CANVAS_H = 600;
-      
+
       // We want to fit it in say, 80% of the canvas.
       const targetW = CANVAS_W * 0.8;
       const targetH = CANVAS_H * 0.8;

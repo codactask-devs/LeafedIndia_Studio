@@ -268,7 +268,7 @@ const Sidebar = () => {
           {activeTab.charAt(0).toUpperCase() + activeTab.slice(1)}
         </h2>
       </div>
-      <div className="sidebar-content">
+      <div data-tour="sidebar-content" className="sidebar-content">
         {renderTabContent()}
       </div>
     </div>

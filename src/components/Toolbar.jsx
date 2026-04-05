@@ -1,9 +1,9 @@
 import React from 'react';
 import useStore from '../store/useStore';
 import "./Toolbar.css";
-import { Undo, Redo, Mail, Save, List } from 'lucide-react';
+import { Undo, Redo, Mail, Save, List, HelpCircle } from 'lucide-react';
 
-const Toolbar = ({ onExport, onSave, onToggleSavedList }) => {
+const Toolbar = ({ onExport, onSave, onToggleSavedList, onStartTour }) => {
     const { undo, redo, history, historyStep, savedDesigns, hasChanges, objects } = useStore();
 
     const canUndo = historyStep > 0;
@@ -51,6 +51,7 @@ const Toolbar = ({ onExport, onSave, onToggleSavedList }) => {
                 )}
 
                 <button
+                    data-tour="save-btn"
                     className={`btn ${hasChanges ? "btn-success" : "btn-outline-success"} toolbar-save-btn`}
                     onClick={onSave}
                     title="Save current design"
@@ -59,9 +60,19 @@ const Toolbar = ({ onExport, onSave, onToggleSavedList }) => {
                     <span>{hasChanges ? "Save Changes" : "Save"}</span>
                 </button>
 
-                <button className="btn btn-primary toolbar-export-btn" onClick={onExport}>
+                <button data-tour="export-btn" className="btn btn-primary toolbar-export-btn" onClick={onExport}>
                     <Mail size={18} />
                     <span>Email Design ({totalCount})</span>
+                </button>
+
+                <button
+                    data-tour="help-btn"
+                    className="btn btn-help toolbar-help-btn"
+                    onClick={onStartTour}
+                    title="Start guided tour"
+                >
+                    <HelpCircle size={18} />
+                    <span>Need Help?</span>
                 </button>
             </div>
         </div>

@@ -1,5 +1,5 @@
 .left-sidebar {
-  width: 72px;
+  width: 80px;
   background-color: var(--color-11); /* Dark green */
   display: flex;
   flex-direction: column;

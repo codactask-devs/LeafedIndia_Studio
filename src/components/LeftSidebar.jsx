@@ -13,9 +13,9 @@ const LeftSidebar = () => {
   const { activeTab, setActiveTab, selectObject } = useStore();
 
   const menuItems = [
-    { id: "templates", icon: LayoutGrid, label: "Templates" },
-    { id: "images", icon: ImageIcon, label: "Images" },
-    { id: "text", icon: Type, label: "Text" },
+    { id: "templates", icon: LayoutGrid, label: "Templates", dataTour: "tab-templates" },
+    { id: "images", icon: ImageIcon, label: "Images", dataTour: "tab-images" },
+    { id: "text", icon: Type, label: "Text", dataTour: "tab-text" },
   ];
 
   const handleTabClick = (tabId) => {
@@ -28,6 +28,7 @@ const LeftSidebar = () => {
       {menuItems.map((item) => (
         <button
           key={item.id}
+          data-tour={item.dataTour}
           className={`left-sidebar-item ${activeTab === item.id ? "active" : ""}`}
           onClick={() => handleTabClick(item.id)}
         >

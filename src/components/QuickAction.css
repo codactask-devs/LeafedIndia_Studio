@@ -125,11 +125,11 @@
     box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.05);
 }
 
-.quick-action-item:hover {
+/* .quick-action-item:hover {
     border-color: #3b82f6;
     transform: translateY(-6px);
     box-shadow: 0 15px 25px -5px rgba(59, 130, 246, 0.2);
-}
+} */
 
 /* ============================================================
    MOBILE RESPONSIVE — QuickAction

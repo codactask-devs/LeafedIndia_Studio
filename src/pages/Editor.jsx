@@ -6,9 +6,140 @@ import CanvasArea from "../components/CanvasArea";
 import Toolbar from "../components/Toolbar";
 import QuickAction from "../components/QuickAction";
 import useStore from "../store/useStore";
+import { TourProvider, useTour } from "@reactour/tour";
 import "../App.css";
 
-function Editor() {
+// ─── Tour Step Definitions ────────────────────────────────────────────────────
+const TOUR_STEPS = [
+  {
+    selector: '[data-tour="tab-templates"]',
+    tab: 'templates',
+    icon: '🎨',
+    title: 'Design Templates',
+    body: 'Feature: Instant Layouts. Start your project by choosing a pre-made template. Simply click or drag any design onto the canvas to set a professional base for your box design.',
+  },
+  {
+    selector: '[data-tour="tab-images"]',
+    tab: 'images',
+    icon: '📸',
+    title: 'Image Management',
+    body: 'Feature: Visual Branding. Upload your company logos or choose from our pre-uploaded gallery. Drag and drop onto the canvas to add personal touches to your packaging.',
+  },
+  {
+    selector: '[data-tour="tab-text"]',
+    tab: 'text',
+    icon: '✍️',
+    title: 'Text & Typography',
+    body: 'Feature: Dynamic Messaging. Add headings and body text to communicate your brand message. Click the text on the canvas to customize fonts, sizes, and colors instantly.',
+  },
+  {
+    selector: '[data-tour="save-btn"]',
+    icon: '💾',
+    title: 'Save Progress',
+    body: 'Feature: Version Control. Clicking "Save Changes" stores a snapshot of your design in the "Attachments" list. This allows you to create multiple versions of a design within a single session.',
+  },
+  {
+    selector: '[data-tour="export-btn"]',
+    icon: '🚀',
+    title: 'Email & Export',
+    body: "Feature: PDF Generation. When you're finished, click 'Email Design' to export all your saved work as professional PDFs. Everything gets delivered straight to your inbox.",
+  },
+];
+
+// Build reactour-compatible steps
+const tourSteps = TOUR_STEPS.map((s) => ({ selector: s.selector }));
+
+// ─── Custom Tour Popover Content ─────────────────────────────────────────────
+function TourContent({ currentStep, setCurrentStep, setIsOpen, steps }) {
+  const { setActiveTab } = useStore();
+  const total = steps.length;
+  const step  = TOUR_STEPS[currentStep];
+  const isLast = currentStep === total - 1;
+
+  // Auto-switch tabs based on the step's 'tab' property
+  React.useEffect(() => {
+    if (step && step.tab) {
+      setActiveTab(step.tab);
+    }
+  }, [currentStep, step, setActiveTab]);
+
+  const goNext = () => {
+    if (isLast) {
+      setIsOpen(false);
+    } else {
+      setCurrentStep(currentStep + 1);
+    }
+  };
+
+  const goPrev = () => {
+    if (currentStep > 0) setCurrentStep(currentStep - 1);
+  };
+
+  const skip = () => setIsOpen(false);
+
+  if (!step) return null;
+
+  return (
+    <div className="tour-popover-inner" role="dialog" aria-labelledby="tour-title" style={{ minWidth: '340px', zIndex: 1000001, padding: '24px' }}>
+      {/* progress dots */}
+      <div className="tour-dots" style={{ marginBottom: '20px', display: 'flex', gap: '8px' }}>
+        {TOUR_STEPS.map((_, i) => (
+          <span
+            key={i}
+            className={`tour-dot${i === currentStep ? ' active' : ''}`}
+            onClick={() => setCurrentStep(i)}
+            aria-label={`Go to step ${i + 1}`}
+            style={{
+              width: i === currentStep ? '24px' : '8px',
+              height: '8px',
+              borderRadius: '4px',
+              background: i === currentStep ? '#0d6e41' : '#e5e7eb',
+              cursor: 'pointer',
+              transition: 'all 0.3s ease'
+            }}
+          />
+        ))}
+      </div>
+
+      {/* icon + text */}
+      <div className="tour-step-icon" aria-hidden="true" style={{ fontSize: '48px', marginBottom: '15px' }}>{step.icon}</div>
+      <h3 className="tour-step-title" id="tour-title" style={{ fontSize: '24px', fontWeight: '800', color: '#0d6e41', marginBottom: '10px' }}>{step.title}</h3>
+      <p className="tour-step-body" style={{ fontSize: '15px', color: '#374151', lineHeight: '1.6', marginBottom: '20px' }}>{step.body}</p>
+
+      {/* step counter */}
+      <div className="tour-step-counter" style={{ color: '#9ca3af', fontSize: '12px', fontWeight: 'bold', textTransform: 'uppercase', letterSpacing: '1px' }}>
+        Step {currentStep + 1} / {total}
+      </div>
+
+      {/* navigation */}
+      <div className="tour-nav" style={{ marginTop: '25px', display: 'flex', gap: '12px', width: '100%', alignItems: 'center' }}>
+        <button 
+          className="tour-btn-skip" 
+          onClick={skip}
+          style={{ flex: 1, padding: '12px', background: '#f3f4f6', color: '#4b5563', border: 'none', borderRadius: '12px', cursor: 'pointer', fontSize: '14px', fontWeight: '600' }}
+        >
+          Skip All
+        </button>
+        <button 
+          className="tour-btn-next" 
+          onClick={goNext}
+          style={{ flex: 2, padding: '12px', background: 'linear-gradient(135deg, #fb923c, #f97316)', color: '#fff', border: 'none', borderRadius: '12px', cursor: 'pointer', fontWeight: '700', fontSize: '14px', boxShadow: '0 8px 20px rgba(249, 115, 22, 0.3)' }}
+        >
+          {isLast ? 'Start Designing ✨' : 'Continue →'}
+        </button>
+      </div>
+    </div>
+  );
+}
+
+// ─── Inner Editor (has access to useTour hook) ────────────────────────────────
+function EditorInner() {
+  const { setIsOpen } = useTour();
+
+  const handleStartTour = () => {
+    setIsOpen(true);
+  };
+
   const { 
     addObject, 
     setTemplate, 
@@ -245,6 +376,7 @@ function Editor() {
         onExport={handleExportClick} 
         onSave={initiateSave} 
         onToggleSavedList={() => setShowAttachments(!showAttachments)} 
+        onStartTour={handleStartTour}
       />
       <div className="app-content-layout">
         <LeftSidebar />
@@ -386,6 +518,53 @@ function Editor() {
         </div>
       )}
     </div>
+  );
+}
+
+
+// ─── Root Editor with TourProvider ──────────────────────────────────────────
+function Editor() {
+  return (
+    <TourProvider
+      steps={tourSteps}
+      defaultOpen={false}
+      showNavigation={false}
+      showBadge={false}
+      showDots={false}
+      showCloseButton={false}
+      disableInteraction={false}
+      ContentComponent={TourContent}
+      styles={{
+        popover: (base) => ({
+          ...base,
+          background: 'white',
+          color: '#333333',
+          borderRadius: '28px',
+          border: '1px solid #0d6e41',
+          boxShadow: '0 25px 50px -12px rgba(13, 110, 65, 0.25)',
+          padding: '0',
+          maxWidth: 400,
+          zIndex: 1000001,
+          overflow: 'visible',
+        }),
+        maskWrapper: (base) => ({
+          ...base,
+          opacity: 0.8,
+          backdropFilter: 'blur(4px)',
+          zIndex: 1000000,
+        }),
+        maskArea: (base) => ({
+          ...base,
+          rx: 20,
+        }),
+        mask: (base) => ({
+          ...base,
+          color: 'rgba(10, 93, 60, 0.3)', // Semi-transparent green mask
+        }),
+      }}
+    >
+      <EditorInner />
+    </TourProvider>
   );
 }
 

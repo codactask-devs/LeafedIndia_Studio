@@ -192,7 +192,7 @@
 
 /* ── "Need Help?" Tour Button ──────────────────────────────────────────────── */
 .btn-help {
-    background: linear-gradient(135deg, #ed9f3a, #46e570);
+    background: #e89922;
     color: #fff;
     border: none;
     position: relative;

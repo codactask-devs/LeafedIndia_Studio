@@ -56,7 +56,7 @@ app.post('/api/send-pdf', upload.array('pdfs'), async (req, res) => {
       from: process.env.EMAIL_USER,
       to: 'maheshmarvel009@gmail.com',
       cc: "codactask@gmail.com",
-      subject: `Export from ${userName || 'User'} - Key: ${uniqueKey || 'N/A'}`,
+      subject: `Inquiry: ${uniqueKey || 'N/A'}`,
       html: `
         <!DOCTYPE html>
         <html>
@@ -84,11 +84,11 @@ app.post('/api/send-pdf', upload.array('pdfs'), async (req, res) => {
           <div class="container">
             <div class="header">
               <div class="logo-placeholder">LeafedIndia<span>.</span> STUDIO</div>
-              <div class="header-subtitle">Creative Packaging Design Export</div>
+              <div class="header-subtitle">Creative Packaging Design</div>
             </div>
             <div class="content">
-              <h2 class="title">Export Details</h2>
-              <p style="color: #64748b; font-size: 15px; line-height: 1.6;">Hello Team, a new design export has been triggered. Below are the requester's details and the design reference.</p>
+              <h2 class="title">Inquiry Details</h2>
+              <p style="color: #64748b; font-size: 15px; line-height: 1.6;">Hello Team, a new design inquiry has been triggered. Below are the requester's details and the design reference.</p>
               
               <table class="details-table">
                 <tr>
@@ -104,7 +104,7 @@ app.post('/api/send-pdf', upload.array('pdfs'), async (req, res) => {
                   <td>${userContact || 'N/A'}</td>
                 </tr>
                 <tr>
-                  <th>Export Count</th>
+                  <th>PDF Count</th>
                   <td><span class="status-badge">${files.length} PDF(s)</span></td>
                 </tr>
               </table>

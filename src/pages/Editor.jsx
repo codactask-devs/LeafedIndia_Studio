@@ -197,6 +197,8 @@ function EditorInner() {
     const x = 100 + Math.random() * 50;
     const y = 100 + Math.random() * 50;
 
+    const hasTemplate = objects.some(obj => obj.type === 'svg-path');
+
     if (type === "image") {
       addObject({
         type: "image",
@@ -218,14 +220,14 @@ function EditorInner() {
         y,
       });
     } else if (type === "svg-template") {
-      if (hasChanges && objects.length > 0) {
+      if (hasChanges && hasTemplate) {
         setPendingTemplate({ type: 'svg-template', x, y, url: payload.url });
         setShowConfirmModal(true);
       } else {
         storeLoadSvgTemplate(x, y, payload.url);
       }
     } else if (type === "template") {
-      if (hasChanges && objects.length > 0) {
+      if (hasChanges && hasTemplate) {
         setPendingTemplate({ type: 'template', payload });
         setShowConfirmModal(true);
       } else {
@@ -274,6 +276,11 @@ function EditorInner() {
   };
 
   const initiateSave = () => {
+    const hasTemplate = objects.some(obj => obj.type === 'svg-path');
+    if (!hasTemplate) {
+      notify("Please select a template before saving.", "error");
+      return;
+    }
     setTempDesignName(`Design ${savedDesigns.length + 1}`);
     setShowSaveNameModal(true);
   };
@@ -312,7 +319,14 @@ function EditorInner() {
   };
 
   const handleConfirmSave = async () => {
+    const hasTemplate = objects.some(obj => obj.type === 'svg-path');
     setShowConfirmModal(false);
+    
+    if (!hasTemplate) {
+      executeTemplateSwitch();
+      return;
+    }
+    
     initiateSave();
     // executeTemplateSwitch is called inside handleSaveDesign after saving
   };
@@ -323,6 +337,13 @@ function EditorInner() {
   };
 
   const handleExportClick = () => {
+    const hasTemplate = objects.some(obj => obj.type === 'svg-path');
+    const hasSavedDesigns = savedDesigns.length > 0;
+
+    if (!hasTemplate && !hasSavedDesigns) {
+      notify("Nothing to export. Please select a template and create a design first.", "error");
+      return;
+    }
     setShowUserModal(true);
   };
 

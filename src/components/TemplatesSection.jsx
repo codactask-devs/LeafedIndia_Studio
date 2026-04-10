@@ -8,7 +8,7 @@ const templateFiles = import.meta.glob("../templates/*.svg", { eager: true });
 const thumbnailFiles = import.meta.glob("../assets/template-thumbnails/*.{png,jpg,jpeg,webp}", { eager: true });
 
 const TemplatesSection = () => {
-    const { loadSvgTemplate, hasChanges, setShowConfirmModal, setPendingTemplate } = useStore();
+    const { loadSvgTemplate, hasChanges, setShowConfirmModal, setPendingTemplate, objects } = useStore();
 
     // Map discovered files to the template list dynamically
     const templatesList = Object.entries(templateFiles).map(([path, module]) => {
@@ -30,7 +30,7 @@ const TemplatesSection = () => {
     });
 
     const handleTemplateClick = (template) => {
-        if (hasChanges) {
+        if (hasChanges && objects.length > 0) {
             setPendingTemplate({ type: 'svg-template', x: 100, y: 100, url: template.url });
             setShowConfirmModal(true);
         } else {

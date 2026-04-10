@@ -41,8 +41,8 @@ const TOUR_STEPS = [
   {
     selector: '[data-tour="export-btn"]',
     icon: '🚀',
-    title: 'Email & Export',
-    body: "Feature: PDF Generation. When you're finished, click 'Email Design' to export all your saved work as professional PDFs. Everything gets delivered straight to your inbox.",
+    title: 'Email The Design',
+    body: "Feature: PDF Generation. When you're finished, click 'Email Design' to export all your saved work as professional PDFs.",
   },
 ];
 

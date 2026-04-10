@@ -275,7 +275,9 @@ const CanvasArea = ({ stageRef }) => {
       height: textNode.height() * scaleY,
       fontSize: (obj.fontSize || 24) * scaleY,
       rotation: textNode.rotation(),
-      color: obj.fill || "#000000"
+      color: obj.fill || "#000000",
+      fontFamily: obj.fontFamily || "'Outfit', sans-serif",
+      fontWeight: obj.fontWeight || "400"
     });
 
     textNode.hide();
@@ -336,6 +338,9 @@ const CanvasArea = ({ stageRef }) => {
               fill="white" 
               listening={false} 
             />
+          </Layer>
+
+          <Layer>
 
             {/* Background Image */}
             {/* <URLImage 
@@ -447,7 +452,8 @@ const CanvasArea = ({ stageRef }) => {
                         text={obj.text}
                         fontSize={obj.fontSize}
                         fill={obj.fill}
-                        fontFamily="'Mazzard Soft', sans-serif"
+                        fontFamily={obj.fontFamily || "'Outfit', sans-serif"}
+                        fontStyle={obj.fontWeight || "400"}
                         onDblClick={(e) => handleTextDblClick(e, obj)}
                         onDblTap={(e) => handleTextDblClick(e, obj)}
                       />
@@ -526,7 +532,8 @@ const CanvasArea = ({ stageRef }) => {
               minHeight: textEditPos.fontSize + "px",
               transform: `rotate(${textEditPos.rotation}deg)`,
               transformOrigin: "top left",
-              fontFamily: "'Mazzard Soft', sans-serif",
+              fontFamily: textEditPos.fontFamily,
+              fontWeight: textEditPos.fontWeight,
             }}
             autoFocus
           />

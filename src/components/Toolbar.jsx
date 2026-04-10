@@ -2,6 +2,7 @@ import React from 'react';
 import useStore from '../store/useStore';
 import "./Toolbar.css";
 import { Undo, Redo, Mail, Save, List, HelpCircle } from 'lucide-react';
+import companylogo from "./../assets/LEAFEDINDIA Logo.svg"
 
 const Toolbar = ({ onExport, onSave, onToggleSavedList, onStartTour }) => {
     const { undo, redo, history, historyStep, savedDesigns, hasChanges, objects } = useStore();
@@ -15,9 +16,9 @@ const Toolbar = ({ onExport, onSave, onToggleSavedList, onStartTour }) => {
 
     return (
         <div className="toolbar-container">
-            <div className="toolbar-logo">
-                LeafedIndia Studio
-            </div>
+        <div id="toolbar-logo" data-tour="toolbar-logo" className="toolbar-logo" onClick={() => window.location.href = "/"}>
+            <img src={companylogo} alt='LeafedIndia Studio Logo' />
+        </div>
 
             <div className="toolbar-actions-wrapper">
                 <button

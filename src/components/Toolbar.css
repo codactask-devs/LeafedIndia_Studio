@@ -11,13 +11,22 @@
 }
 
 .toolbar-logo {
-  font-size: 22px;
-  font-weight: 800;
-  color: var(--primary);
-  letter-spacing: -0.04em;
   display: flex;
   align-items: center;
-  gap: 10px;
+  gap: 12px;
+  cursor: pointer;
+  transition: transform 0.2s ease;
+}
+
+.toolbar-logo:hover {
+  transform: scale(1.02);
+}
+
+.toolbar-logo img {
+  height: 100px;
+  width: auto;
+  object-fit: contain;
+  filter: drop-shadow(0 2px 4px rgba(0,0,0,0.05));
 }
 
 .toolbar-actions-wrapper {
@@ -132,9 +141,11 @@
   }
 
   .toolbar-logo {
-    font-size: 14px;
-    letter-spacing: -0.03em;
-    gap: 4px;
+    gap: 8px;
+  }
+
+  .toolbar-logo img {
+    height: 32px;
   }
 
   .toolbar-actions-wrapper {
@@ -192,7 +203,7 @@
 
 /* ── "Need Help?" Tour Button ──────────────────────────────────────────────── */
 .btn-help {
-    background: #e89922;
+    /* background: #e89922; */
     color: #fff;
     border: none;
     position: relative;

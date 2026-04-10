@@ -253,7 +253,8 @@ function EditorInner() {
     const dataUrl = stageRef.current.toDataURL({ 
       mimeType: "image/jpeg", 
       quality: 0.8, 
-      pixelRatio: 1.5 
+      pixelRatio: 1.5,
+      backgroundColor: "white" 
     });
 
     const pdf = new jsPDF("l", "pt", "a4");
@@ -337,7 +338,16 @@ function EditorInner() {
     setIsSending(true);
 
     try {
-      const uniqueKey = crypto.randomUUID(); // Generate unique key
+      const generateUniqueKey = () => {
+        const now = new Date();
+        const dateStr = now.getFullYear() + 
+                        String(now.getMonth() + 1).padStart(2, '0') + 
+                        String(now.getDate()).padStart(2, '0');
+        const randomStr = Math.floor(1000 + Math.random() * 9000);
+        return `QT-${dateStr}-${randomStr}`;
+      };
+      
+      const uniqueKey = generateUniqueKey();
       const formData = new FormData();
       
       formData.append("userName", userInfo.name);
@@ -354,7 +364,7 @@ function EditorInner() {
         formData.append("pdfs", new File([currentBlob], "current-design.pdf", { type: "application/pdf" }));
       }
 
-      const response = await fetch("http://localhost:5000/api/send-pdf", {
+      const response = await fetch("https://leafedindia-studio.onrender.com/api/send-pdf", {
         method: "POST",
         body: formData,
       });

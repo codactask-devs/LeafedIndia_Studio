@@ -254,7 +254,6 @@ function EditorInner() {
       mimeType: "image/jpeg", 
       quality: 0.8, 
       pixelRatio: 1.5,
-      backgroundColor: "white" 
     });
 
     const pdf = new jsPDF("l", "pt", "a4");
@@ -344,7 +343,7 @@ function EditorInner() {
                         String(now.getMonth() + 1).padStart(2, '0') + 
                         String(now.getDate()).padStart(2, '0');
         const randomStr = Math.floor(1000 + Math.random() * 9000);
-        return `QT-${dateStr}-${randomStr}`;
+        return `IQ-${dateStr}-${randomStr}`;
       };
       
       const uniqueKey = generateUniqueKey();

@@ -329,6 +329,14 @@ const CanvasArea = ({ stageRef }) => {
         >
 
           <Layer>
+            {/* 0. Solid White Background for Exports */}
+            <Rect 
+              width={DESIGN_WIDTH} 
+              height={DESIGN_HEIGHT} 
+              fill="white" 
+              listening={false} 
+            />
+
             {/* Background Image */}
             {/* <URLImage 
               src={canvasBackground} 

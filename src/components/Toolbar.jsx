@@ -53,7 +53,7 @@ const Toolbar = ({ onExport, onSave, onToggleSavedList, onStartTour }) => {
 
                 <button
                     data-tour="save-btn"
-                    className={`btn ${hasChanges ? "btn-success" : "btn-outline-success"} toolbar-save-btn`}
+                    className={`btn ${hasChanges ? "btn-success1" : "btn-outline-success1"} toolbar-save-btn`}
                     onClick={onSave}
                     title="Save current design"
                 >
@@ -61,7 +61,7 @@ const Toolbar = ({ onExport, onSave, onToggleSavedList, onStartTour }) => {
                     <span>{hasChanges ? "Save Changes" : "Save"}</span>
                 </button>
 
-                <button data-tour="export-btn" className="btn btn-primary toolbar-export-btn" onClick={onExport}>
+                <button data-tour="export-btn" className="btn toolbar-export-btn" onClick={onExport}>
                     <Mail size={18} />
                     <span>Email Design ({totalCount})</span>
                 </button>

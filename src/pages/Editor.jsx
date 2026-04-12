@@ -412,7 +412,8 @@ function EditorInner() {
         resetCanvas();
       } else {
         const errorData = await response.json();
-        notify("Failed to send: " + errorData.error, "error");
+        const errorMessage = errorData.details ? `${errorData.error} (${errorData.details})` : errorData.error || "Unknown error";
+        notify("Failed to send: " + errorMessage, "error");
       }
     } catch (error) {
        console.error("Export error:", error);

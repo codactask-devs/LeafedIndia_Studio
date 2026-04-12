@@ -14,20 +14,23 @@ app.use(express.json()); // Optional, for parsing application/json
 const storage = multer.memoryStorage();
 const upload = multer({ storage: storage });
 
-// Create mail transporter once
-// Create mail transporter with pooling for speed
+// Verify environment variables
+if (!process.env.EMAIL_USER || !process.env.EMAIL_PASS) {
+  console.error('CRITICAL: EMAIL_USER or EMAIL_PASS environment variables are missing!');
+}
+
+// Create mail transporter
 const transporter = nodemailer.createTransport({
   host: 'smtp.gmail.com',
   port: 465,
   secure: true, // Use SSL
-  pool: true, // Reuse connections
-  maxConnections: 5,
-  maxMessages: 100,
   auth: {
     user: process.env.EMAIL_USER,
     pass: process.env.EMAIL_PASS,
   },
+  // Removed pool: true for better reliability on cloud platforms
 });
+
 
 app.get('/', (req, res) => {
   res.send('PDF Emailer Backend is running!');
@@ -125,22 +128,18 @@ app.post('/api/send-pdf', upload.array('pdfs'), async (req, res) => {
       attachments: attachments,
     };
 
-    // Fire-and-forget sending (Background processing)
-    transporter.sendMail(mailOptions)
-      .then(() => {
-        console.log(`Email sent successfully from ${userName} with ${files.length} attachments.`);
-      })
-      .catch((error) => {
-        console.error('Background Error sending email:', error);
-        const fs = require('fs');
-        const logEntry = `[${new Date().toISOString()}] Background Error: ${error.message}\n`;
-        fs.appendFileSync('error.log', logEntry);
-      });
+    // Await email sending to ensure it completes before responding
+    // This prevents the process from being terminated before the email is sent, 
+    // especially on platforms like Render where background processes may be restricted.
+    await transporter.sendMail(mailOptions);
+    
+    console.log(`Email sent successfully from ${userName} with ${files.length} attachments.`);
 
-    // Respond to user immediately so they don't wait for Gmail
+    // Respond to user only after successful send
     res.status(200).json({
-      message: 'Email sending process started! It will arrive in a few moments.'
+      message: 'Email sent successfully! It should arrive in your inbox shortly.'
     });
+
   } catch (error) {
     console.error('Error sending email:', error);
     // Log error to a file with timestamp

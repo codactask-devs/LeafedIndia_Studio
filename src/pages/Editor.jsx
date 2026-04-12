@@ -1,4 +1,4 @@
-import React, { useRef, useState, useCallback } from "react";
+import React, { useRef, useState, useCallback, useEffect } from "react";
 import jsPDF from "jspdf";
 import LeftSidebar from "../components/LeftSidebar";
 import Sidebar from "../components/Sidebar";
@@ -16,33 +16,33 @@ const TOUR_STEPS = [
     tab: 'templates',
     icon: '🎨',
     title: 'Design Templates',
-    body: 'Feature: Instant Layouts. Start your project by choosing a pre-made template. Simply click or drag any design onto the canvas to set a professional base for your box design.',
+    body: 'Start your project by choosing a pre-made template. Simply click or drag any design onto the canvas to set a professional base for your box design.',
   },
   {
     selector: '[data-tour="tab-images"]',
     tab: 'images',
     icon: '📸',
     title: 'Image Management',
-    body: 'Feature: Visual Branding. Upload your company logos or choose from our pre-uploaded gallery. Drag and drop onto the canvas to add personal touches to your packaging.',
+    body: 'Upload your company logos or choose from our pre-uploaded gallery. Drag and drop onto the canvas to add personal touches to your packaging.',
   },
   {
     selector: '[data-tour="tab-text"]',
     tab: 'text',
     icon: '✍️',
     title: 'Text & Typography',
-    body: 'Feature: Dynamic Messaging. Add headings and body text to communicate your brand message. Click the text on the canvas to customize fonts, sizes, and colors instantly.',
+    body: 'Add headings and body text to communicate your brand message. Click the text on the canvas to customize fonts, sizes, and colors instantly.',
   },
   {
     selector: '[data-tour="save-btn"]',
     icon: '💾',
     title: 'Save Progress',
-    body: 'Feature: Version Control. Clicking "Save Changes" stores a snapshot of your design in the "Attachments" list. This allows you to create multiple versions of a design within a single session.',
+    body: 'Clicking "Save Changes" stores a snapshot of your design in the "Attachments" list. This allows you to create multiple versions of a design within a single session.',
   },
   {
     selector: '[data-tour="export-btn"]',
     icon: '🚀',
     title: 'Email The Design',
-    body: "Feature: PDF Generation. When you're finished, click 'Email Design' to export all your saved work as professional PDFs.",
+    body: 'Send your saved designs directly to us along with your details. Just click "Email Design" to share your work instantly and keep the process moving smoothly.',
   },
 ];
 
@@ -187,6 +187,22 @@ function EditorInner() {
     setNotification({ message, type });
     setTimeout(() => setNotification(null), 3000);
   };
+
+  // ─── Cold Start Ping ────────────────────────────────────────────────────────
+  // Wakes up the Render backend when the app loads to avoid delays during first export
+  useEffect(() => {
+    const pingBackend = async () => {
+      try {
+        await fetch("https://leafedindia-studio.onrender.com/api/send-pdf", {
+          method: "GET", // A simple GET call to wake up the service
+          mode: 'no-cors' // Use no-cors to avoid preflight issues for a simple ping
+        });
+      } catch (e) {
+        // Silent catch: the goal is just to trigger a request to the server
+      }
+    };
+    pingBackend();
+  }, []);
 
   const handleDrop = (e) => {
     e.preventDefault();
@@ -490,20 +506,21 @@ function EditorInner() {
           />
         </div>
         <div className="form-group">
-          <input 
-            type="tel" 
-            placeholder="Contact Number" 
-            value={userInfo.contact}
-            onChange={(e) => {
-              const onlyNumbers = e.target.value.replace(/[^0-9]/g, '');
-              setUserInfo({...userInfo, contact: onlyNumbers});
-            }}
-            required
-            pattern="[0-9]*"
-            inputMode="numeric"
-            title="Please enter only numbers"
-            maxLength={10}
-          />
+          <input
+  type="tel"
+  placeholder="Contact Number"
+  value={userInfo.contact}
+  onChange={(e) => {
+    // Allow digits, plus, hyphen, and spaces
+    const formatted = e.target.value.replace(/[^0-9+\-\s]/g, '');
+    setUserInfo({ ...userInfo, contact: formatted });
+  }}
+  required
+  pattern="[0-9+\-\s]*"
+  inputMode="tel"
+  title="Please enter a valid phone number"
+  maxLength={20} // or remove this if you want no limit
+/>
         </div>
         <div className="form-group">
           <input 
@@ -528,8 +545,8 @@ function EditorInner() {
 {showUniqueKeyModal && (
   <div className="modal-overlay">
     <div className="modal-content">
-      <h3 style={{ color: '#0d6e41' }}>Design Exported!</h3>
-      <p>Please copy this unique key to contact the owner and get your design:</p>
+      <h3 style={{ color: '#0d6e41' }}>Thank you!</h3>
+      <p>Your design has been received. Please save your unique ID for all future communication regarding this submission</p>
       <div className="form-group" style={{ display: 'flex', gap: '8px', marginTop: '15px' }}>
         <input 
           type="text" 

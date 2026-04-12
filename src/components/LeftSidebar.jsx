@@ -32,8 +32,8 @@ const LeftSidebar = () => {
           className={`left-sidebar-item ${activeTab === item.id ? "active" : ""}`}
           onClick={() => handleTabClick(item.id)}
         >
-          <item.icon size={24} />
-          <span>{item.label}</span>
+          <item.icon size={45} />
+          <span style={{fontSize:"14px"}}>{item.label}</span>
         </button>
       ))}
     </div>

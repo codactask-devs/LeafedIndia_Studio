@@ -38,9 +38,9 @@
   top: 50%;
   right: -24px;
   transform: translateY(-50%);
-  width: 24px;
-  height: 48px;
-  background-color: #ffffff;
+  width: 30px;
+  height: 60px;
+  background-color: #173346;
   border: 1px solid #e2e8f0;
   border-left: none;
   border-radius: 0 8px 8px 0;
@@ -48,7 +48,7 @@
   align-items: center;
   justify-content: center;
   cursor: pointer;
-  color: #64748b;
+  color: #fcfcfc;
   z-index: 100;
   box-shadow: 4px 0 6px -1px rgba(0, 0, 0, 0.05);
   transition: color 0.2s, background-color 0.2s;
@@ -94,7 +94,7 @@
   display: flex;
   align-items: center;
   justify-content: center;
-  color: #64748b;
+  color: #ffffff;
   cursor: pointer;
   transition: all 0.2s;
 }

@@ -1,13 +1,14 @@
 @import url("./../utils/FontTheme.css");
 .left-sidebar {
   width: 200px;
-  background-color: var(--color-11); /* Dark green */
+  background-color: #173346; /* Dark green */
   display: flex;
   flex-direction: column;
   padding: 12px 0;
   border-right: 1px solid rgba(255, 255, 255, 0.05);
   z-index: 100;
   flex-shrink: 0;
+  gap: 70px;
 }
 
 .left-sidebar-item {
@@ -23,6 +24,7 @@
   cursor: pointer;
   transition: all 0.2s ease;
   position: relative;
+  font-size: 24px;
 }
 
 .left-sidebar-item svg {

@@ -16,9 +16,13 @@ const Toolbar = ({ onExport, onSave, onToggleSavedList, onStartTour }) => {
 
     return (
         <div className="toolbar-container">
-        <div id="toolbar-logo" data-tour="toolbar-logo" className="toolbar-logo" onClick={() => window.location.href = "/"}>
-            <img src={companylogo} alt='LeafedIndia Studio Logo' />
-        </div>
+        <div id="toolbar-logo" data-tour="toolbar-logo" className="toolbar-logo">
+  <img 
+    src={companylogo} 
+    alt='LeafedIndia Studio Logo' 
+    style={{height: "100px"}}  // Changed from 100px to 140px
+  />
+</div>
 
             <div className="toolbar-actions-wrapper">
                 <button

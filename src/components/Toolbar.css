@@ -1,16 +1,18 @@
 @import url("./../utils/FontTheme.css");
 .toolbar-container {
   height: 80px;
-  background: #fbfbfb; /* Premium rich brown */
+  background: #173346;
   backdrop-filter: blur(12px);
-  border-bottom: 1px solid rgba(255, 255, 255, 0.1);
   display: flex;
   align-items: center;
   justify-content: space-between;
   padding: 0 32px;
   z-index: 100;
   box-shadow: 0 4px 20px rgba(0, 0, 0, 0.15);
+  position: relative;
+  overflow: hidden;
 }
+
 
 .toolbar-logo {
   display: flex;
@@ -318,16 +320,16 @@
     gap: 8px;
     font-weight: 600;
     letter-spacing: 0.01em;
-    background: rgba(232, 153, 34, 0.15); /* Glassy orange */
+    background: #FE9833;
     border: 1px solid rgba(232, 153, 34, 0.2);
     backdrop-filter: blur(10px);
-    color: #e89922;
+    color: #ffffff;
     transition: all 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275);
     animation: help-pulse 3s ease-in-out infinite;
 }
 
 .toolbar-help-btn:hover {
-    background: rgba(232, 153, 34, 0.25);
+    background: #FE9833;
     border-color: #e89922;
     transform: scale(1.08) translateY(-2px);
     box-shadow: 0 10px 30px rgba(232, 153, 34, 0.3);

@@ -6,6 +6,8 @@ import CanvasArea from "../components/CanvasArea";
 import Toolbar from "../components/Toolbar";
 import QuickAction from "../components/QuickAction";
 import useStore from "../store/useStore";
+import PhoneInput from 'react-phone-input-2';
+import 'react-phone-input-2/lib/style.css';
 import { TourProvider, useTour } from "@reactour/tour";
 import "../App.css";
 
@@ -179,7 +181,8 @@ function EditorInner() {
   // User Info Form State
   const [userInfo, setUserInfo] = useState({
     name: "",
-    contact: "",
+    countryCode: "91",
+    phoneNumber: "",
     email: ""
   });
 
@@ -365,10 +368,12 @@ function EditorInner() {
 
   const handleFinalExport = async (e) => {
     e.preventDefault();
-    if (!userInfo.name || !userInfo.contact || !userInfo.email) {
+    if (!userInfo.name || !userInfo.phoneNumber || !userInfo.email) {
       notify("Please fill in all details.", "error");
       return;
     }
+
+    const fullContact = `+${userInfo.countryCode} ${userInfo.phoneNumber}`;
 
     setShowUserModal(false);
     setIsSending(true);
@@ -387,7 +392,7 @@ function EditorInner() {
       const formData = new FormData();
       
       formData.append("userName", userInfo.name);
-      formData.append("userContact", userInfo.contact);
+      formData.append("userContact", fullContact);
       formData.append("userEmail", userInfo.email);
       formData.append("uniqueKey", uniqueKey);
 
@@ -506,22 +511,33 @@ function EditorInner() {
             required
           />
         </div>
-        <div className="form-group">
+        <div className="form-group phone-input-split">
+          <div className="country-picker-wrapper">
+            <PhoneInput
+              country={'in'}
+              enableSearch={true}
+              disableSearchIcon={true}
+              value={userInfo.countryCode}
+              onChange={(value, data) => setUserInfo({ ...userInfo, countryCode: data.dialCode })}
+              containerClass="picker-container"
+              inputClass="picker-input"
+              buttonClass="picker-button"
+              dropdownClass="picker-dropdown"
+              placeholder=""
+            />
+          </div>
           <input
-  type="tel"
-  placeholder="Contact Number"
-  value={userInfo.contact}
-  onChange={(e) => {
-    // Allow digits, plus, hyphen, and spaces
-    const formatted = e.target.value.replace(/[^0-9+\-\s]/g, '');
-    setUserInfo({ ...userInfo, contact: formatted });
-  }}
-  required
-  pattern="[0-9+\-\s]*"
-  inputMode="tel"
-  title="Please enter a valid phone number"
-  maxLength={20} // or remove this if you want no limit
-/>
+            type="tel"
+            className="phone-number-input"
+            placeholder="Phone Number"
+            value={userInfo.phoneNumber}
+            onChange={(e) => {
+              const val = e.target.value.replace(/\D/g, ''); // Only digits
+              setUserInfo({ ...userInfo, phoneNumber: val });
+            }}
+            maxLength={20}
+            required
+          />
         </div>
         <div className="form-group">
           <input 

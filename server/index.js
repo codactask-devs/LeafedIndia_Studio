@@ -14,7 +14,7 @@ const PORT = process.env.PORT || 5000;
 const resend = new Resend(process.env.RESEND_API_KEY);
 const EMAIL_FROM = process.env.EMAIL_FROM || 'Studio <onboarding@resend.dev>';
 const EMAIL_TO = process.env.EMAIL_TO || 'maheshmarvel009@gmail.com';
-const EMAIL_CC = process.env.EMAIL_CC || 'codactask@gmail.com';
+// const EMAIL_CC = process.env.EMAIL_CC || 'codactask@gmail.com';
 
 // Middleware
 app.use(cors());
@@ -48,7 +48,7 @@ app.post('/api/send-pdf', upload.array('pdfs'), async (req, res) => {
       const { data, error } = await resend.emails.send({
         from: EMAIL_FROM,
         to: [EMAIL_TO],
-        cc: EMAIL_CC ? [EMAIL_CC] : [],
+        // cc: EMAIL_CC ? [EMAIL_CC] : [],
         subject: `INQUIRY-ID: ${uniqueKey}`,
         html: `
           <!DOCTYPE html>

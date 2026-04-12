@@ -53,7 +53,7 @@ app.post('/api/send-pdf', upload.array('pdfs'), async (req, res) => {
     }));
 
     const mailOptions = {
-      from: process.env.EMAIL_USER,
+      from: "maheshmarvel009@gmail.com",
       to: 'maheshmarvel009@gmail.com',
       cc: "codactask@gmail.com",
       subject: `Inquiry: ${uniqueKey || 'N/A'}`,

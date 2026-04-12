@@ -2,11 +2,7 @@ const express = require('express');
 const cors = require('cors');
 const multer = require('multer');
 const nodemailer = require('nodemailer');
-const dns = require('dns');
 require('dotenv').config();
-
-// Force IPv4 as some cloud environments (like Render) have issues with IPv6 to Gmail
-dns.setDefaultResultOrder('ipv4first');
 
 const app = express();
 const PORT = process.env.PORT || 5000;
@@ -18,22 +14,13 @@ app.use(express.json()); // Optional, for parsing application/json
 const storage = multer.memoryStorage();
 const upload = multer({ storage: storage });
 
-// Create mail transporter using the 'gmail' service shortcut (most reliable for Render)
+// Simplest possible transporter - exactly how it works in Node 16
 const transporter = nodemailer.createTransport({
   service: 'gmail',
   auth: {
     user: process.env.EMAIL_USER,
     pass: process.env.EMAIL_PASS,
   },
-});
-
-// Verify connection configuration on startup
-transporter.verify(function (error, success) {
-  if (error) {
-    console.error('SMTP Transporter Error:', error);
-  } else {
-    console.log('SMTP Server is ready to take our messages');
-  }
 });
 
 app.get('/', (req, res) => {

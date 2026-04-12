@@ -2,7 +2,11 @@ const express = require('express');
 const cors = require('cors');
 const multer = require('multer');
 const nodemailer = require('nodemailer');
+const dns = require('dns');
 require('dotenv').config();
+
+// Force IPv4 as some cloud environments (like Render) have issues with IPv6 to Gmail
+dns.setDefaultResultOrder('ipv4first');
 
 const app = express();
 const PORT = process.env.PORT || 5000;

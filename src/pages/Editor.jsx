@@ -214,7 +214,7 @@ function EditorInner() {
         text: payload.text || "Hello",
         fontSize: payload.fontSize || 32,
         fontWeight: payload.fontWeight || "400",
-        fontFamily: payload.fontFamily || "'Outfit', sans-serif",
+        fontFamily: payload.fontFamily || "'Mazzard', sans-serif",
         fill: "#0f172a",
         x,
         y,

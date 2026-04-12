@@ -1,3 +1,4 @@
+@import url("./../utils/FontTheme.css");
 .canvas-workspace {
   flex: 1;
   display: flex;

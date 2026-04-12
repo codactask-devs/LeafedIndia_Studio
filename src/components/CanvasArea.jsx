@@ -276,7 +276,7 @@ const CanvasArea = ({ stageRef }) => {
       fontSize: (obj.fontSize || 24) * scaleY,
       rotation: textNode.rotation(),
       color: obj.fill || "#000000",
-      fontFamily: obj.fontFamily || "'Outfit', sans-serif",
+      fontFamily: obj.fontFamily || "'Mazzard', sans-serif",
       fontWeight: obj.fontWeight || "400"
     });
 
@@ -452,7 +452,7 @@ const CanvasArea = ({ stageRef }) => {
                         text={obj.text}
                         fontSize={obj.fontSize}
                         fill={obj.fill}
-                        fontFamily={obj.fontFamily || "'Outfit', sans-serif"}
+                        fontFamily={obj.fontFamily || "'Mazzard', sans-serif"}
                         fontStyle={obj.fontWeight || "400"}
                         onDblClick={(e) => handleTextDblClick(e, obj)}
                         onDblTap={(e) => handleTextDblClick(e, obj)}

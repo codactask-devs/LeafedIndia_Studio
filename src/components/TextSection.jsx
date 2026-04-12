@@ -27,9 +27,9 @@ const TextSection = () => {
         });
     };
 
-    const addHeading = () => addText("Add Heading", 48, "800", "'Montserrat', sans-serif");
-    const addSubHeading = () => addText("Add Sub Heading", 32, "600", "'Outfit', sans-serif");
-    const addBodyText = () => addText("Add Body Text", 18, "400", "'Outfit', sans-serif");
+    const addHeading = () => addText("Add Heading", 48, "800", "'Mazzard', sans-serif");
+    const addSubHeading = () => addText("Add Sub Heading", 32, "600", "'Mazzard', sans-serif");
+    const addBodyText = () => addText("Add Body Text", 18, "400", "'Mazzard', sans-serif");
 
     return (
         <div className="sidebar-section-container">
@@ -46,7 +46,7 @@ const TextSection = () => {
                                 text: "Add Heading", 
                                 fontSize: 48, 
                                 fontWeight: "800", 
-                                fontFamily: "'Montserrat', sans-serif" 
+                                fontFamily: "'Mazzard', sans-serif" 
                             }));
                         }}
                     >
@@ -65,7 +65,7 @@ const TextSection = () => {
                                 text: "Add Sub Heading", 
                                 fontSize: 32, 
                                 fontWeight: "600", 
-                                fontFamily: "'Outfit', sans-serif" 
+                                fontFamily: "'Mazzard', sans-serif" 
                             }));
                         }}
                     >
@@ -84,7 +84,7 @@ const TextSection = () => {
                                 text: "Add Body Text", 
                                 fontSize: 18, 
                                 fontWeight: "400", 
-                                fontFamily: "'Outfit', sans-serif" 
+                                fontFamily: "'Mazzard', sans-serif" 
                             }));
                         }}
                     >
@@ -103,13 +103,13 @@ const TextSection = () => {
                         className="text-preset-mini serif-gold" 
                         onClick={() => addText("Classic Script", 54, "700", "'Playfair Display', serif")}
                     >
-                        <span style={{ fontFamily: "'Playfair Display', serif" }}>Serif</span>
+                        <span style={{ fontFamily: "'Mazzard', sans-serif" }}>Serif</span>
                     </button>
                     <button 
                         className="text-preset-mini hand-chic" 
-                        onClick={() => addText("Handwritten", 48, "700", "'Caveat', cursive")}
+                        onClick={() => addText("Handwritten", 48, "700", "'Mazzard', sans-serif")}
                     >
-                        <span style={{ fontFamily: "'Caveat', cursive" }}>Chic</span>
+                        <span style={{ fontFamily: "'Mazzard', sans-serif" }}>Chic</span>
                     </button>
                 </div>
             </div>

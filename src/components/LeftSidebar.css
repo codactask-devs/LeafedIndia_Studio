@@ -1,3 +1,4 @@
+@import url("./../utils/FontTheme.css");
 .left-sidebar {
   width: 200px;
   background-color: var(--color-11); /* Dark green */

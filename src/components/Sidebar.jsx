@@ -176,10 +176,11 @@ const Sidebar = () => {
                         <select 
                             className="sidebar-category-select" 
                             style={{ padding: '10px 14px' }}
-                            value={selectedObject.fontFamily || "'Outfit', sans-serif"}
+                            value={selectedObject.fontFamily || "'Mazzard', sans-serif"}
                             onChange={(e) => updateObject(selectedId, { fontFamily: e.target.value })}
                         >
                             <optgroup label="Sans Serif">
+                                <option value="'Mazzard', sans-serif">Mazzard</option>
                                 <option value="'Inter', sans-serif">Inter</option>
                                 <option value="'Outfit', sans-serif">Outfit</option>
                                 <option value="'Montserrat', sans-serif">Montserrat</option>

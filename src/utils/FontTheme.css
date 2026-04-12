@@ -1,0 +1,12 @@
+
+@font-face {
+  font-family: "Mazzard";
+  src: local("MazzardH-Regular"),
+    url("./../font/MazzardH-Regular.ttf") format("truetype");
+}
+@font-face {
+  font-family: "MazzardMedium";
+  src: local("MazzardH-Medium"),
+    url("./../font/MazzardH-Regular.ttf") format("truetype");
+}
+

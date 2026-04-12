@@ -1,3 +1,4 @@
+@import url("./../utils/FontTheme.css");
 .sidebar-container {
   background-color: var(--color-4);
   background-image:
@@ -297,19 +298,19 @@
 .h1-preview {
   font-size: 28px;
   font-weight: 800;
-  font-family: 'Montserrat', sans-serif;
+  font-family: 'Mazzard', sans-serif !important;
 }
 
 .h2-preview {
   font-size: 20px;
   font-weight: 600;
-  font-family: 'Outfit', sans-serif;
+  font-family: 'Mazzard', sans-serif !important;
 }
 
 .body-preview {
   font-size: 14px;
   font-weight: 400;
-  font-family: 'Outfit', sans-serif;
+  font-family: 'Mazzard', sans-serif !important;
 }
 
 .mini-grid {
@@ -964,4 +965,4 @@
     margin-top: 10px;
     padding: 15px;
   }
-}
+}

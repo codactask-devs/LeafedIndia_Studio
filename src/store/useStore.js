@@ -105,7 +105,7 @@ const useStore = create((set, get) => ({
       text,
       fontSize: 24,
       fill: "#000000",
-      fontFamily: "Mazzard Soft",
+      fontFamily: "Mazzard",
       fontWeight: "normal",
       align: "left",
     });

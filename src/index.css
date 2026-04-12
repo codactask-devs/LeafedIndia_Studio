@@ -29,24 +29,15 @@
   --radius-lg: 24px;
 }
 
-@import url('https://db.onlinewebfonts.com/c/5c2e273f55d14e9b9b6e8f8e7f6e4a6a?family=MazzardH-Regular');
-@import url('https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700&display=swap');
-
-/* User Provided Mazzard Soft Fonts */
-@font-face {
-  font-family: 'Mazzard Soft';
-  src: url('/fonts/MazzardSoft-Regular.woff2') format('woff2');
-  font-weight: normal;
-  font-style: normal;
-  font-display: swap;
-}
+@import url("./utils/FontTheme.css");
 
 * {
   box-sizing: border-box;
+  font-family: 'Mazzard', sans-serif !important;
 }
 
 body, button, input, textarea, select {
-  font-family: 'Mazzard Soft', 'MazzardH-Regular', 'Outfit', sans-serif;
+  font-family: 'Mazzard', sans-serif !important;
 }
 
 body {

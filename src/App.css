@@ -1,8 +1,9 @@
+@import url("./utils/FontTheme.css");
 .app-main-container {
   display: flex;
   flex-direction: column;
   height: 100vh;
-  font-family: 'Outfit', 'Montserrat', sans-serif;
+  font-family: 'Mazzard', sans-serif;
   background-color: #f8fafc;
 }
 

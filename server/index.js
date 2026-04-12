@@ -43,7 +43,6 @@ app.post('/api/send-pdf', upload.array('pdfs'), async (req, res) => {
         from: 'Studio <onboarding@resend.dev>', // Change to your verified domain later
         to: ['maheshmarvel009@gmail.com'],
         // cc: ['codactask@gmail.com'],
-        reply_to: userEmail,
         subject: `INQUIRY-ID: ${uniqueKey}`,
         html: `
           <!DOCTYPE html>

@@ -48,11 +48,9 @@ const Sidebar = () => {
           {isSidebarOpen ? (
             <>
               <ChevronLeft size={30} style={{ color: "#ffffff" }} />
-              <ChevronLeft size={30} style={{ color: "#ffffff" }} />
             </>
           ) : (
             <>
-              <ChevronRight size={30} style={{ color: "#ffffff" }} />
               <ChevronRight size={30} style={{ color: "#ffffff" }} />
             </>
           )}

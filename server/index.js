@@ -23,8 +23,8 @@ const upload = multer({ storage: storage });
 // Create mail transporter with pooling for speed
 const transporter = nodemailer.createTransport({
   host: 'smtp.gmail.com',
-  port: 465,
-  secure: true, // Use SSL
+  port: 587,
+  secure: false, // Use STARTTLS for port 587
   pool: true, // Reuse connections
   maxConnections: 5,
   maxMessages: 100,

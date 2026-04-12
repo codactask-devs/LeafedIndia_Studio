@@ -3,6 +3,7 @@ import useStore from '../store/useStore';
 import "./Toolbar.css";
 import { Undo, Redo, Mail, Save, List, HelpCircle } from 'lucide-react';
 import companylogo from "./../assets/LEAFEDINDIA Logo.svg"
+import mobileLogo from "./../assets/LEAFEDINDIA Logo2.svg"
 
 const Toolbar = ({ onExport, onSave, onToggleSavedList, onStartTour }) => {
     const { undo, redo, history, historyStep, savedDesigns, hasChanges, objects } = useStore();
@@ -17,12 +18,15 @@ const Toolbar = ({ onExport, onSave, onToggleSavedList, onStartTour }) => {
     return (
         <div className="toolbar-container">
         <div id="toolbar-logo" data-tour="toolbar-logo" className="toolbar-logo">
-  <img 
-    src={companylogo} 
-    alt='LeafedIndia Studio Logo' 
-    style={{height: "100px"}}  // Changed from 100px to 140px
-  />
-</div>
+          <picture>
+            <source media="(max-width: 768px)" srcSet={mobileLogo} />
+            <img 
+              src={companylogo} 
+              alt='LeafedIndia Studio Logo' 
+              className="logo-img"
+            />
+          </picture>
+        </div>
 
             <div className="toolbar-actions-wrapper">
                 <button

@@ -26,11 +26,12 @@
   transform: scale(1.05);
 }
 
-.toolbar-logo img {
-  height: 50px; /* Adjusted height for better fit */
+.toolbar-logo .logo-img {
+  height: 80px; /* Increased from 50px for better visibility */
   width: auto;
   object-fit: contain;
   filter: drop-shadow(0 2px 4px rgba(0,0,0,0.1)) brightness(1.1);
+  display: block;
 }
 
 .toolbar-actions-wrapper {
@@ -227,8 +228,8 @@
     gap: 8px;
   }
 
-  .toolbar-logo img {
-    height: 32px;
+  .toolbar-logo .logo-img {
+    height: 36px;
   }
 
   .toolbar-actions-wrapper {

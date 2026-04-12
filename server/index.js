@@ -14,13 +14,18 @@ app.use(express.json()); // Optional, for parsing application/json
 const storage = multer.memoryStorage();
 const upload = multer({ storage: storage });
 
-// Simplest possible transporter - exactly how it works in Node 16
+// Final SMTP attempt: Using googlemail host and long timeout to bypass network jitter
 const transporter = nodemailer.createTransport({
-  service: 'gmail',
+  host: 'smtp.googlemail.com',
+  port: 465,
+  secure: true,
   auth: {
     user: process.env.EMAIL_USER,
     pass: process.env.EMAIL_PASS,
   },
+  connectionTimeout: 60000, // 60 seconds
+  greetingTimeout: 60000,
+  socketTimeout: 60000,
 });
 
 app.get('/', (req, res) => {

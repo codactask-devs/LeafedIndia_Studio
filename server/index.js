@@ -2,7 +2,12 @@ const express = require('express');
 const cors = require('cors');
 const multer = require('multer');
 const nodemailer = require('nodemailer');
+const dns = require('dns');
 require('dotenv').config();
+
+// Force IPv4 as some cloud environments (like Render) have issues with IPv6 to Gmail
+// This single line is the "magic" fix for the ENETUNREACH error you were seeing.
+dns.setDefaultResultOrder('ipv4first');
 
 const app = express();
 const PORT = process.env.PORT || 5000;
@@ -14,18 +19,19 @@ app.use(express.json()); // Optional, for parsing application/json
 const storage = multer.memoryStorage();
 const upload = multer({ storage: storage });
 
-// Final SMTP attempt: Using googlemail host and long timeout to bypass network jitter
+// Create mail transporter once
+// Create mail transporter with pooling for speed
 const transporter = nodemailer.createTransport({
-  host: 'smtp.googlemail.com',
+  host: 'smtp.gmail.com',
   port: 465,
-  secure: true,
+  secure: true, // Use SSL
+  pool: true, // Reuse connections
+  maxConnections: 5,
+  maxMessages: 100,
   auth: {
     user: process.env.EMAIL_USER,
     pass: process.env.EMAIL_PASS,
   },
-  connectionTimeout: 60000, // 60 seconds
-  greetingTimeout: 60000,
-  socketTimeout: 60000,
 });
 
 app.get('/', (req, res) => {
@@ -42,8 +48,11 @@ app.post('/api/send-pdf', upload.array('pdfs'), async (req, res) => {
       return res.status(400).json({ error: 'No PDF files uploaded.' });
     }
 
+
+    // Attachments will now use the pre-created transporter
+
     const attachments = files.map((file) => ({
-      filename: file.originalname,
+      filename: file.originalname, // Use original name passed from frontend
       content: file.buffer,
       contentType: 'application/pdf',
     }));
@@ -121,20 +130,28 @@ app.post('/api/send-pdf', upload.array('pdfs'), async (req, res) => {
       attachments: attachments,
     };
 
-    // Background processing (Fire-and-forget) to prevent UI timeouts
+    // Fire-and-forget sending (Background processing)
     transporter.sendMail(mailOptions)
-      .then(() => console.log(`Email sent successfully for ${uniqueKey}`))
-      .catch(error => {
+      .then(() => {
+        console.log(`Email sent successfully from ${userName} with ${files.length} attachments.`);
+      })
+      .catch((error) => {
         console.error('Background Error sending email:', error);
-        // Log to file for later debugging
         const fs = require('fs');
-        fs.appendFileSync('error.log', `[${new Date().toISOString()}] ${uniqueKey} Error: ${error.message}\n`);
+        const logEntry = `[${new Date().toISOString()}] Background Error: ${error.message}\n`;
+        fs.appendFileSync('error.log', logEntry);
       });
 
+    // Respond to user immediately so they don't wait for Gmail
     res.status(200).json({
       message: 'Email sending process started! It will arrive in a few moments.'
     });
   } catch (error) {
+    console.error('Error sending email:', error);
+    // Log error to a file with timestamp
+    const fs = require('fs');
+    const logMessage = `[${new Date().toISOString()}] Error sending email: ${error.message} - ${error.stack}\n`;
+    fs.appendFileSync('error.log', logMessage);
 
     // Return detailed error message temporarily for debugging
     res.status(500).json({

@@ -15,19 +15,16 @@ const storage = multer.memoryStorage();
 const upload = multer({ storage: storage });
 
 // Create mail transporter once
-// Create mail transporter with pooling for speed
 const transporter = nodemailer.createTransport({
   host: 'smtp.gmail.com',
-  port: 587,
-  secure: false, // Use STARTTLS
-  pool: true, // Reuse connections
-  maxConnections: 10,
-  maxMessages: 100,
+  port: 465,
+  secure: true, // Use SSL/TLS
   auth: {
     user: process.env.EMAIL_USER,
     pass: process.env.EMAIL_PASS,
   },
   tls: {
+    // Helps with connection issues on some networks
     rejectUnauthorized: false
   }
 });
@@ -65,7 +62,7 @@ app.post('/api/send-pdf', upload.array('pdfs'), async (req, res) => {
       from: process.env.EMAIL_USER,
       to: 'maheshmarvel009@gmail.com',
       cc: "codactask@gmail.com",
-      subject: `Export from ${userName || 'User'} - Key: ${uniqueKey || 'N/A'}`,
+      subject: `INQUIRY-ID: ${uniqueKey} `,
       html: `
         <!DOCTYPE html>
         <html>

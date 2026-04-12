@@ -14,22 +14,16 @@ app.use(express.json()); // Optional, for parsing application/json
 const storage = multer.memoryStorage();
 const upload = multer({ storage: storage });
 
-// Create mail transporter once
+// Create mail transporter using the 'gmail' service shortcut (most reliable for Render)
 const transporter = nodemailer.createTransport({
-  host: 'smtp.gmail.com',
-  port: 465,
-  secure: true, // Use SSL/TLS
+  service: 'gmail',
   auth: {
     user: process.env.EMAIL_USER,
     pass: process.env.EMAIL_PASS,
   },
-  tls: {
-    // Helps with connection issues on some networks
-    rejectUnauthorized: false
-  }
 });
 
-// Verify connection configuration
+// Verify connection configuration on startup
 transporter.verify(function (error, success) {
   if (error) {
     console.error('SMTP Transporter Error:', error);
@@ -131,19 +125,20 @@ app.post('/api/send-pdf', upload.array('pdfs'), async (req, res) => {
       attachments: attachments,
     };
 
-    // Wait for the email to be sent so we can catch errors
-    await transporter.sendMail(mailOptions);
-    console.log(`Email sent successfully from ${userName} with ${files.length} attachments.`);
+    // Background processing (Fire-and-forget) to prevent UI timeouts
+    transporter.sendMail(mailOptions)
+      .then(() => console.log(`Email sent successfully for ${uniqueKey}`))
+      .catch(error => {
+        console.error('Background Error sending email:', error);
+        // Log to file for later debugging
+        const fs = require('fs');
+        fs.appendFileSync('error.log', `[${new Date().toISOString()}] ${uniqueKey} Error: ${error.message}\n`);
+      });
 
     res.status(200).json({
-      message: 'Email sent successfully!'
+      message: 'Email sending process started! It will arrive in a few moments.'
     });
   } catch (error) {
-    console.error('Error sending email:', error);
-    // Log error to a file with timestamp
-    const fs = require('fs');
-    const logMessage = `[${new Date().toISOString()}] Error sending email: ${error.message} - ${error.stack}\n`;
-    fs.appendFileSync('error.log', logMessage);
 
     // Return detailed error message temporarily for debugging
     res.status(500).json({

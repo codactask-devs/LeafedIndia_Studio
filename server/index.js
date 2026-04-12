@@ -20,18 +20,17 @@ const storage = multer.memoryStorage();
 const upload = multer({ storage: storage });
 
 // Create mail transporter once
-// Create mail transporter with pooling for speed
 const transporter = nodemailer.createTransport({
   host: 'smtp.gmail.com',
   port: 587,
   secure: false, // Use STARTTLS for port 587
-  pool: true, // Reuse connections
-  maxConnections: 5,
-  maxMessages: 100,
   auth: {
     user: process.env.EMAIL_USER,
     pass: process.env.EMAIL_PASS,
   },
+  connectionTimeout: 60000, // 60 seconds
+  greetingTimeout: 60000,
+  socketTimeout: 60000,
   // FORCE IPv4 ONLY - This is the "Nuclear Option" to fix the ENETUNREACH error
   lookup: (hostname, options, callback) => {
     return dns.lookup(hostname, { family: 4 }, callback);

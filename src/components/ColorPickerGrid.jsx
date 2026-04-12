@@ -22,10 +22,15 @@ const DEFAULT_COLORS = [
     "#fbeee6", "#edbb99", "#e59866", "#dc7633", "#d35400", "#ba4a00", "#a04000", "#873600", "#6e2c00", "#512e0f"
 ];
 
-const ColorPickerGrid = ({ color, onChange }) => {
+const ColorPickerGrid = ({ color, onChange, onChangeComplete }) => {
     const [showNative, setShowNative] = useState(false);
     // Normalize color value to avoid mismatch (e.g., #FFFFFF vs #ffffff)
     const normalizedColor = color ? color.toLowerCase() : "";
+
+    const handleColorChange = (c) => {
+        onChange(c);
+        if (onChangeComplete) onChangeComplete(c);
+    };
 
     return (
         <div className="color-picker-grid-container">
@@ -38,7 +43,7 @@ const ColorPickerGrid = ({ color, onChange }) => {
                             className={`color-picker-swatch ${isSelected ? 'selected' : ''}`}
                             style={{ backgroundColor: c }}
                             title={c}
-                            onClick={() => onChange(c)}
+                            onClick={() => handleColorChange(c)}
                         >
                             {isSelected && (
                                 <svg 
@@ -72,6 +77,7 @@ const ColorPickerGrid = ({ color, onChange }) => {
                             type="color"
                             value={normalizedColor || "#000000"}
                             onChange={(e) => onChange(e.target.value)}
+                            onBlur={(e) => onChangeComplete && onChangeComplete(e.target.value)}
                         />
                     </div>
                     <input
@@ -79,6 +85,7 @@ const ColorPickerGrid = ({ color, onChange }) => {
                         className="sidebar-text-input-premium"
                         value={normalizedColor || "#000000"}
                         onChange={(e) => onChange(e.target.value)}
+                        onBlur={(e) => onChangeComplete && onChangeComplete(e.target.value)}
                         maxLength={7}
                     />
                 </div>

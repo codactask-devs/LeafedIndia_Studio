@@ -30,6 +30,7 @@ const Sidebar = () => {
     activeTab,
     isSidebarOpen,
     toggleSidebar,
+    saveHistory,
   } = useStore();
 
   const selectedObject = objects.find((o) => o.id === selectedId);
@@ -129,6 +130,7 @@ const Sidebar = () => {
                   <ColorPickerGrid
                     color={selectedObject.fill || "#4F46E5"}
                     onChange={(c) => updateObject(selectedId, { fill: c })}
+                    onChangeComplete={() => saveHistory()}
                   />
                 </div>
               </div>
@@ -189,6 +191,7 @@ const Sidebar = () => {
                   onChange={(e) =>
                     updateObject(selectedId, { text: e.target.value })
                   }
+                  onBlur={() => saveHistory()}
                   placeholder="Type something amazing..."
                 />
               </div>
@@ -199,9 +202,10 @@ const Sidebar = () => {
                     className="sidebar-category-select"
                     style={{ padding: "10px 14px" }}
                     value={selectedObject.fontFamily || "'Mazzard', sans-serif"}
-                    onChange={(e) =>
+                    onChange={(e) => {
                       updateObject(selectedId, { fontFamily: e.target.value })
-                    }
+                      saveHistory();
+                    }}
                   >
                     <optgroup label="Sans Serif">
                       <option value="'Mazzard', sans-serif">Mazzard</option>
@@ -248,6 +252,8 @@ const Sidebar = () => {
                         fontSize: parseInt(e.target.value),
                       })
                     }
+                    onMouseUp={() => saveHistory()}
+                    onTouchEnd={() => saveHistory()}
                     className="sidebar-range-premium"
                   />
                   <input
@@ -259,6 +265,7 @@ const Sidebar = () => {
                         fontSize: parseInt(e.target.value) || 0,
                       })
                     }
+                    onBlur={() => saveHistory()}
                   />
                 </div>
               </div>
@@ -269,6 +276,7 @@ const Sidebar = () => {
                   <ColorPickerGrid
                     color={selectedObject.fill || "#000000"}
                     onChange={(c) => updateObject(selectedId, { fill: c })}
+                    onChangeComplete={() => saveHistory()}
                   />
                 </div>
               </div>

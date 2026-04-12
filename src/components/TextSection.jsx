@@ -8,7 +8,8 @@ const TextSection = () => {
         addObject, 
         selectedId, 
         objects, 
-        updateObject 
+        updateObject,
+        saveHistory
     } = useStore();
 
     const selectedObject = objects.find((o) => o.id === selectedId);
@@ -124,6 +125,7 @@ const TextSection = () => {
                             className="sidebar-textarea-premium"
                             value={selectedObject.text}
                             onChange={(e) => updateObject(selectedId, { text: e.target.value })}
+                            onBlur={() => saveHistory()}
                             placeholder="Type something amazing..."
                         />
                     </div>
@@ -137,6 +139,8 @@ const TextSection = () => {
                                 max="200"
                                 value={selectedObject.fontSize}
                                 onChange={(e) => updateObject(selectedId, { fontSize: parseInt(e.target.value) })}
+                                onMouseUp={() => saveHistory()}
+                                onTouchEnd={() => saveHistory()}
                                 className="sidebar-range-premium"
                             />
                             <input
@@ -144,6 +148,7 @@ const TextSection = () => {
                                 className="sidebar-number-input"
                                 value={selectedObject.fontSize}
                                 onChange={(e) => updateObject(selectedId, { fontSize: parseInt(e.target.value) || 0 })}
+                                onBlur={() => saveHistory()}
                             />
                         </div>
                     </div>
@@ -154,6 +159,7 @@ const TextSection = () => {
                             <ColorPickerGrid 
                                 color={selectedObject.fill || "#000000"} 
                                 onChange={(c) => updateObject(selectedId, { fill: c })} 
+                                onChangeComplete={() => saveHistory()}
                             />
                         </div>
                     </div>

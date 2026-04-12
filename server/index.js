@@ -15,17 +15,19 @@ const storage = multer.memoryStorage();
 const upload = multer({ storage: storage });
 
 // Create mail transporter
+// Create mail transporter
 const transporter = nodemailer.createTransport({
-  host: 'smtp.gmail.com',
-  port: 587,
-  secure: false, // Use STARTTLS
+  service: 'gmail',
   auth: {
     user: process.env.EMAIL_USER,
     pass: process.env.EMAIL_PASS,
   },
-  connectionTimeout: 10000, // 10 seconds timeout
-  greetingTimeout: 5000,    // 5 seconds timeout
+  connectionTimeout: 15000,
+  greetingTimeout: 10000,
+  socketTimeout: 15000,
 });
+
+
 
 
 

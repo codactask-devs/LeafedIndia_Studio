@@ -189,20 +189,20 @@ function EditorInner() {
   };
 
   // ─── Cold Start Ping ────────────────────────────────────────────────────────
-  // Wakes up the Render backend when the app loads to avoid delays during first export
-  useEffect(() => {
-    const pingBackend = async () => {
-      try {
-        await fetch("https://leafedindia-studio.onrender.com/api/send-pdf", {
-          method: "GET", // A simple GET call to wake up the service
-          mode: 'no-cors' // Use no-cors to avoid preflight issues for a simple ping
-        });
-      } catch (e) {
-        // Silent catch: the goal is just to trigger a request to the server
-      }
-    };
-    pingBackend();
-  }, []);
+  // // Wakes up the Render backend when the app loads to avoid delays during first export
+  // useEffect(() => {
+  //   const pingBackend = async () => {
+  //     try {
+  //       await fetch("https://leafedindia-studio.onrender.com/api/send-pdf", {
+  //         method: "POST", // A simple GET call to wake up the service
+  //         mode: 'no-cors' // Use no-cors to avoid preflight issues for a simple ping
+  //       });
+  //     } catch (e) {
+  //       // Silent catch: the goal is just to trigger a request to the server
+  //     }
+  //   };
+  //   pingBackend();
+  // }, []);
 
   const handleDrop = (e) => {
     e.preventDefault();

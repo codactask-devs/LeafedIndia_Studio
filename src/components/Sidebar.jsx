@@ -61,7 +61,7 @@ const Sidebar = () => {
             onClick={() => selectObject(null)}
             title="Back to Assets"
           >
-            <ChevronLeft size={25} style={{ color: "white" }} />
+            <ChevronLeft size={25} />
           </button>
           <h2 className="sidebar-title-inline">
             Edit{" "}

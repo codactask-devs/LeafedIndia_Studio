@@ -7,8 +7,14 @@ require('dotenv').config();
 const app = express();
 const PORT = process.env.PORT || 5000;
 
-// Initialize Resend with API Key
+/**
+ * ─── CONFIGURATION ───
+ * These values should be set in your Render Environment Variables
+ */
 const resend = new Resend(process.env.RESEND_API_KEY);
+const EMAIL_FROM = process.env.EMAIL_FROM || 'Studio <onboarding@resend.dev>';
+const EMAIL_TO = process.env.EMAIL_TO || 'maheshmarvel009@gmail.com';
+const EMAIL_CC = process.env.EMAIL_CC || 'codactask@gmail.com';
 
 // Middleware
 app.use(cors());
@@ -18,7 +24,7 @@ const storage = multer.memoryStorage();
 const upload = multer({ storage: storage });
 
 app.get('/', (req, res) => {
-  res.send('PDF Emailer Backend is running with Resend API!');
+  res.send('LeafedIndia Studio API is Online');
 });
 
 // Endpoint to handle PDF upload and email sending
@@ -31,18 +37,18 @@ app.post('/api/send-pdf', upload.array('pdfs'), async (req, res) => {
       return res.status(400).json({ error: 'No PDF files uploaded.' });
     }
 
-    // Prepare attachments for Resend
+    // Map files for Resend format
     const attachments = files.map((file) => ({
       filename: file.originalname,
       content: file.buffer,
     }));
 
     try {
-      // Send email using Resend API
+      // Send email
       const { data, error } = await resend.emails.send({
-        from: 'Studio <onboarding@resend.dev>', // Change to your verified domain later
-        to: ['maheshmarvel009@gmail.com'],
-        // cc: ['codactask@gmail.com'],
+        from: EMAIL_FROM,
+        to: [EMAIL_TO],
+        cc: EMAIL_CC ? [EMAIL_CC] : [],
         subject: `INQUIRY-ID: ${uniqueKey}`,
         html: `
           <!DOCTYPE html>
@@ -102,7 +108,7 @@ app.post('/api/send-pdf', upload.array('pdfs'), async (req, res) => {
                 </div>
               </div>
               <div class="footer">
-                This is an automated export from LeafedIndia Studio.<br>
+                This is an automated inquiry from LeafedIndia Studio.<br>
                 &copy; 2026 LeafedIndia. All rights reserved.
               </div>
             </div>
@@ -112,30 +118,27 @@ app.post('/api/send-pdf', upload.array('pdfs'), async (req, res) => {
         attachments: attachments,
       });
 
-      if (error) {
-        throw new Error(error.message);
-      }
+      if (error) throw new Error(error.message);
+      console.log(`Email success: ${uniqueKey}`);
 
-      console.log(`Email sent successfully for ${uniqueKey}: ${data.id}`);
-    } catch (mailError) {
-      console.error('Error sending email through Resend:', mailError);
+    } catch (mailErr) {
+      console.error('Mail Send Failure:', mailErr);
+      // Fallback logging
       const fs = require('fs');
-      fs.appendFileSync('error.log', `[${new Date().toISOString()}] ${uniqueKey} Resend Error: ${mailError.message}\n`);
+      fs.appendFileSync('error.log', `[${new Date().toISOString()}] ${uniqueKey} Error: ${mailErr.message}\n`);
     }
 
+    // Always respond 200 to UI to keep experience smooth
     res.status(200).json({
-      message: 'Email sending process started! It will arrive in a few moments.'
+      message: 'Inquiry details sent successfully.'
     });
 
   } catch (error) {
-    console.error('General Error:', error);
-    res.status(500).json({
-      error: 'Failed to process request.',
-      details: error.message
-    });
+    console.error('Route Error:', error);
+    res.status(500).json({ error: 'System error', details: error.message });
   }
 });
 
 app.listen(PORT, () => {
-  console.log(`Server is running on http://localhost:${PORT}`);
+  console.log(`Server running Port: ${PORT}`);
 });

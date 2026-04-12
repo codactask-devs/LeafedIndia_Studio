@@ -9,7 +9,7 @@ import useStore from "../store/useStore";
 import PhoneInput from 'react-phone-input-2';
 import 'react-phone-input-2/lib/style.css';
 import { TourProvider, useTour } from "@reactour/tour";
-import "../App.css";
+
 
 // ─── Tour Step Definitions ────────────────────────────────────────────────────
 const TOUR_STEPS = [

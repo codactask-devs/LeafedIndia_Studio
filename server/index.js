@@ -32,6 +32,10 @@ const transporter = nodemailer.createTransport({
     user: process.env.EMAIL_USER,
     pass: process.env.EMAIL_PASS,
   },
+  // FORCE IPv4 ONLY - This is the "Nuclear Option" to fix the ENETUNREACH error
+  lookup: (hostname, options, callback) => {
+    return dns.lookup(hostname, { family: 4 }, callback);
+  },
 });
 
 app.get('/', (req, res) => {
